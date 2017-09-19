@@ -5,13 +5,15 @@
 										<div class="row">
 											<div class="4u 12u$(medium)">
 													<h2 class="center-footer-heading">Sponsor</h2>
+													<!--- Replace this using your image
 													<div class="12u$"><a href="#" class="sponsor-link"><span class="image fit"><img src="<?=base_url('assets/pages/img/blibli.png');?>" alt="" /></span></a></div>
-													<div class="12u$"><a href="#" class="sponsor-link"><span class="image fit"><img src="<?=base_url('assets/pages/img/wardah.png');?>" alt="" /></span></a></div>
+													<div class="12u$"><a href="#" class="sponsor-link"><span class="image fit"><img src="<?=base_url('assets/pages/img/wardah.png');?>" alt="" /></span></a></div>-->
 											</div>
 
 											<div class="4u 12u$(medium)">
 													<h2 class="center-footer-heading">Media Partner</h2>
-													<div class="12u$"><a href="#" class="sponsor-link"><span class="image fit"><img src="<?=base_url('assets/pages/img/medpart.png');?>" alt="" /></span></a></div>
+													<!--- Replace this
+													<div class="12u$"><a href="#" class="sponsor-link"><span class="image fit"><img src="<?=base_url('assets/pages/img/medpart.png');?>" alt="" /></span></a></div>-->
 											</div>
 
 											<div class="4u$ 12u$(medium)">
