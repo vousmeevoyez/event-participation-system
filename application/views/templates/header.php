@@ -38,8 +38,8 @@
 							<h2>Menu</h2>
 							<ul class="links">
 								<li><a href="<?=base_url('home');?>">Home</a></li>
-								<li><a href="<?=base_url('pages/view/login');?>">Log In</a></li>
-								<li><a href="<?=base_url('pages/view/signup');?>">Sign Up</a></li>
+								<li><a href="<?=base_url('participant/login');?>">Log In</a></li>
+								<li><a href="<?=base_url('participant/signup');?>">Sign Up</a></li>
 							</ul>
 							<a href="#" class="close">Close</a>
 						</div>

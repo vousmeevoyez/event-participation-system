@@ -1,11 +1,13 @@
-
+<?php 
+            echo form_open('participant/add'); 
+?>
 				<!-- Wrapper -->
 					<section id="wrapper">
 						<header>
 							<div class="inner">
 								<h2 class="major" style="text-align: center;">REGISTER</h2>
-							<form method="post">
 								<div class="field" id="form-alert">
+									<?php echo validation_errors(); ?>
 								</div>
 								<div class="field">
 									<label for="name">Full Name</label>
@@ -23,9 +25,8 @@
 									<span class="form-alert" id="span-error-password"></span>
 								</div>
 								<ul class="actions">
-									<li><input type="button" id="regist-individual" value="REGISTER" /></li>
+									<li><input type="button" value="REGISTER" /></li>
 								</ul>
-							</form>
 							</div>
 						</header>
 					</section>

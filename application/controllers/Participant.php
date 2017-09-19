@@ -7,6 +7,10 @@ class Participant extends CI_Controller {
 	{
 	 		parent::__construct();
 			$this->load->helper('url');
+			$this->load->helper('form');
+
+			$this->load->library('form_validation');
+
 	 		$this->load->model('participant_auth_model');
 	 		$this->load->model('participant_model');
 	 		$this->load->model('team_model');
@@ -14,10 +18,44 @@ class Participant extends CI_Controller {
 
 	public function competition_list()
 	{
-        
         $this->load->view('templates/header');
         $this->load->view('pages/competition');
         $this->load->view('templates/footer');
+	}
+
+	public function login()
+	{
+		$this->form_validation->set_rules('username', 'Email', 'required|valid_email');
+    	$this->form_validation->set_rules('password', 'Password', 'required');
+    	
+    	if ($this->form_validation->run() == FALSE)
+        {
+        	$this->load->view('templates/header');
+        	$this->load->view('pages/login');
+        	$this->load->view('templates/footer');
+        }
+        else
+        {
+        	$this->check();
+        }
+	}
+
+	public function signup()
+	{
+		$this->form_validation->set_rules('user_name', 'Name', 'required|valid_email');
+    	$this->form_validation->set_rules('user_email', 'Email', 'required');
+    	$this->form_validation->set_rules('user_password', 'Password', 'required');
+    	
+    	if ($this->form_validation->run() == FALSE)
+        {
+        	$this->load->view('templates/header');
+        	$this->load->view('pages/signup');
+        	$this->load->view('templates/footer');
+        }
+        else
+        {
+        	$this->check();
+        }
 	}
 	
 	public function dashboard()
@@ -84,6 +122,8 @@ class Participant extends CI_Controller {
 		}
         
 	}
+
+
 
 	//Routing to add new team form
 	public function add_team_form()
@@ -230,17 +270,8 @@ class Participant extends CI_Controller {
 		//inserting data to db
 		$this->participant_auth_model->add($data2);
 
-		//json response
-		$response = json_encode(array(
-					'status' => 0,
-					'message' => 'ADD_USER_SUCCESS',
-					'data' => []
-		));
-
-		return 	$this->output
-						->set_content_type('application/json')
-						->set_status_header(200)
-						->set_output($response);
+		//redirect success page
+		
 	}
 
 	//Add team member action
@@ -343,7 +374,8 @@ class Participant extends CI_Controller {
 					redirect('/participant/dashboard');
 
 				}else{
-					redirect('/pages/view/login');
+					$this->form_validation->set_message('check', 'Invalid username or password');
+					redirect('/participant/login');
 				}
 			}
 	}
@@ -355,6 +387,6 @@ class Participant extends CI_Controller {
 			'username' => '',
 		);
 		$this->session->unset_userdata('logged_in',$session_data);
-		redirect('/pages/view/login');
+		redirect('/participant/login');
 	}
 }
