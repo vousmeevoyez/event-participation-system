@@ -25,10 +25,10 @@
 															<h1>Juara 1</h1>
 														</div>
 														<div class="4u"><span class="image fit"><img src="<?=base_url('assets/pages/img/trophy2.png');?>" alt="" class="prize" /></span>
-															<h1>2ND PLACE</h1>
+															<h1>Juara 2</h1>
 														</div>
 														<div class="4u"><span class="image fit"><img src="<?=base_url('assets/pages/img/trophy3.png');?>" alt="" class="prize" /></span>
-															<h1>3RD PLACE</h1>
+															<h1>Juara 3</h1>
 														</div>
 													</div>
 													<p style="text-align: center;"><sub>*Hadiah dapat berubah sewaktu-waktu sesuai jumlah peserta yang akan berpartisipasi</sub></p>

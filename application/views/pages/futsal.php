@@ -17,20 +17,23 @@
 										<h2 class="comp-heading">PRIZE</h2>
 											<div class="box alt">
 													<div class="row uniform prize-row">
-														<div class="4u"><span class="image fit"><img src="<?=base_url('assets/pages/img/trophy.png');?>" alt="" class="prize" /></span>
+														<div class="4u"><span class="image fit"><img src="<?=base_url('assets/pages/img/trophy.png');?>" alt="" class="prize"/></span>
+															<h1>Juara 1</h1>
 														</div>
-														<div class="4u">
-															<h1>1ST PLACE</h1>
-															<h1>IDR 4.000.000</h1>
+														<div class="4u"><span class="image fit"><img src="<?=base_url('assets/pages/img/trophy2.png');?>" alt="" class="prize" /></span>
+															<h1>Juara 2</h1>
+														</div>
+														<div class="4u"><span class="image fit"><img src="<?=base_url('assets/pages/img/trophy3.png');?>" alt="" class="prize" /></span>
+															<h1>Juara 3</h1>
 														</div>
 													</div>
+													<p style="text-align: center;"><sub>*Hadiah dapat berubah sewaktu-waktu sesuai jumlah peserta yang akan berpartisipasi</sub></p>
 													<hr>
-													<div class="row uniform prize-row">
+													<!--<div class="row uniform prize-row">
 														<div class="4u"><span class="image fit"><img src="<?=base_url('assets/pages/img/trophy2.png');?>" alt="" class="prize" /></span>
 														</div>
 														<div class="4u">
 															<h1>2ND PLACE</h1>
-															<h1>IDR 3.000.000</h1>
 														</div>
 													</div>
 													<hr>
@@ -39,10 +42,9 @@
 														</div>
 														<div class="4u">
 															<h1>3RD PLACE</h1>
-															<h1>IDR 2.000.000</h1>
 														</div>
 													</div>
-													<hr>
+													<hr>-->
 											</div>
 									</section>
 									<br>
@@ -67,8 +69,8 @@
 												</table>
 											</div>
 									</section>
-																		<section>
-										<a href="<?=base_url('pages/view/signup');?>" class="button special fit">Register Your Team Now!!!</a>
+									<section>
+										<a href="<?=base_url('participant/signup');?>" class="button special fit">Daftar Sekarang</a>
 									</section>
 										
 									</section>

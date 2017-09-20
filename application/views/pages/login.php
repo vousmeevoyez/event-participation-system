@@ -3,6 +3,7 @@
 			header("location: http://localhost/ci-hifest/participant/check");
 		}
 		?>
+
 		<?php 
             echo form_open('participant/login'); 
         ?>
@@ -10,7 +11,14 @@
 						<header>
 							<div class="inner">
 								<h2 class="major" style="text-align: center;">Login</h2>
-								<?php echo validation_errors('<p style="color:red;">','</p>'); ?>
+								<?php 
+									    if(!empty($success_msg)){
+									        echo '<p class="statusMsg">'.$success_msg.'</p>';
+									    }elseif(!empty($error_msg)){
+									        echo '<p class="statusMsg">'.$error_msg.'</p>';
+									    }
+								?>
+								<?php echo validation_errors('<p style="color:palevioletred;">','</p>'); ?>
 								<div class="field">
 									<label for="email">Email</label>
 									<input type="email" name="username" id="email" placeholder="Alamat email" />

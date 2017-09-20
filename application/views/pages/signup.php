@@ -7,7 +7,7 @@
 							<div class="inner">
 								<h2 class="major" style="text-align: center;">DAFTAR</h2>
 								<div class="field" id="form-alert">
-									<?php echo validation_errors('<p style="color:red;">','</p>'); ?>
+									<?php echo validation_errors('<p style="color:palevioletred;">','</p>'); ?>
 								</div>
 								<div class="field">
 									<label for="name">Full Name</label>

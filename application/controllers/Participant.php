@@ -15,16 +15,17 @@ class Participant extends CI_Controller {
 	 		$this->load->model('participant_model');
 	 		$this->load->model('team_model');
 	}
-
+	// Display available competition
 	public function competition_list()
 	{
         $this->load->view('templates/header');
         $this->load->view('pages/competition');
         $this->load->view('templates/footer');
 	}
-
+	// display login form
 	public function login()
 	{
+		//form validation
 		$this->form_validation->set_rules('username', 'Email', 'required|valid_email');
     	$this->form_validation->set_rules('password', 'Password', 'required');
     	
@@ -40,8 +41,10 @@ class Participant extends CI_Controller {
         }
 	}
 
+	//display sign up form
 	public function signup()
 	{
+		//form validation
 		$this->form_validation->set_rules('user_name', 'Name', 'required');
     	$this->form_validation->set_rules('user_email', 'Email', 'required|valid_email');
     	$this->form_validation->set_rules('user_password', 'Password', 'required');
@@ -50,6 +53,26 @@ class Participant extends CI_Controller {
         {
         	$this->load->view('templates/header');
         	$this->load->view('pages/signup');
+        	$this->load->view('templates/footer');
+        }
+        else
+        {
+        	$this->add();
+        }
+	}
+
+	public function register_details()
+	{
+       	//form validation
+		$this->form_validation->set_rules('participant_university', 'University', 'required');
+    	$this->form_validation->set_rules('participant_msisdn', 'Nomor Handphone', 'required|valid_email');
+    	$this->form_validation->set_rules('participant_id', 'Nomor identitas', 'required');
+
+    	
+    	if ($this->form_validation->run() == FALSE)
+        {
+        	$this->load->view('templates/header-participant');
+        	$this->load->view('pages/register-details');
         	$this->load->view('templates/footer');
         }
         else
@@ -73,49 +96,51 @@ class Participant extends CI_Controller {
 			$view['participant_name']  = $participant_data->participant_name;
 			$view['participant_email'] = $participant_data->participant_email;
 			$view['team']              = 'Belum ada';
-			$view['status']            = 'Belum Diverifikasi';
+			$view['status'] 		   = 'Telah Diverifikasi';
 
 			//CHECK THE PARTICIPANT STATUS (1 is Verified and 0 is not verified)
-			if($status != 0){
-				$view['status'] = 'Telah Diverifikasi';
+			if($status == 0){
+				$this->register_details();
+			}
+			else{
+				//check the fk_team for the participant if is 0 it means participant does't join any team yet
+				if($fk_team != 0 ){
+					//Get the team where the participant belongs
+					$team_data    = $this->team_model->get_by_fk($fk_team);
+					$view['team'] = $team_data->team_name;
+					$team_type    = $team_data->team_type;
+					$team_leader  = $team_data->fk_participant;
+
+					// convert team code to team competition type
+					if($team_type == 'sd'){
+						$view['team_type'] = 'Software Development';
+					}else if($team_type == 'bp'){
+						$view['team_type'] = 'Business Plan';
+					}else if($team_type == 'sm'){
+						$view['team_type'] = 'Short Movie';
+					}else{
+						$view['team_type'] = 'Futsal';
+					}
+
+					//team leader level
+					if($team_leader == $pk_participant){
+						$this->load->view('templates/header-participant');
+						$this->load->view('pages/participant-dashboard-lvl2',$view);
+						$this->load->view('templates/footer');
+					}else{
+					//Member team level
+						$this->load->view('templates/header-participant');
+						$this->load->view('pages/participant-dashboard-lvl0',$view);
+						$this->load->view('templates/footer');
+					}
+
+				}else{
+					$this->load->view('templates/header-participant');
+					$this->load->view('pages/participant-dashboard-lvl1',$view);
+					$this->load->view('templates/footer');
+				}	
 			}
 
-			//check the fk_team for the participant if is 0 it means participant does't join any team yet
-			if($fk_team != 0 ){
-				//Get the team where the participant belongs
-				$team_data    = $this->team_model->get_by_fk($fk_team);
-				$view['team'] = $team_data->team_name;
-				$team_type    = $team_data->team_type;
-				$team_leader  = $team_data->fk_participant;
-
-				// convert team code to team competition type
-				if($team_type == 'sd'){
-					$view['team_type'] = 'Software Development';
-				}else if($team_type == 'bp'){
-					$view['team_type'] = 'Business Plan';
-				}else if($team_type == 'sm'){
-					$view['team_type'] = 'Short Movie';
-				}else{
-					$view['team_type'] = 'Futsal';
-				}
-
-				//team leader level
-				if($team_leader == $pk_participant){
-					$this->load->view('templates/header-participant');
-					$this->load->view('pages/participant-dashboard-lvl2',$view);
-					$this->load->view('templates/footer');
-				}else{
-				//Member team level
-					$this->load->view('templates/header-participant');
-					$this->load->view('pages/participant-dashboard-lvl0',$view);
-					$this->load->view('templates/footer');
-				}
-
-			}else{
-				$this->load->view('templates/header-participant');
-				$this->load->view('pages/participant-dashboard-lvl1',$view);
-				$this->load->view('templates/footer');
-			}
 		}else{
 			//Redirect to login form
 			redirect('pages/view/login');
@@ -271,11 +296,50 @@ class Participant extends CI_Controller {
 		$this->participant_auth_model->add($data2);
 
 		//redirect success page
+		$this->load->view('templates/header');
+		$this->load->view('pages/signup-success');
+		$this->load->view('templates/footer');
+
+		
+	}
+
+		//ADD PARTICIPANT ACTION
+	public function add_details()
+	{
+		//get all post data from user input form
+		$user_name 		= $this->input->post('user_name');
+		$user_email 	= $this->input->post('user_email');
+		$user_password 	= MD5($this->input->post('user_password'));
+
+		//define array to be inserted to participant table
+		$data1 = array(
+				'participant_name' 	 => $user_name,
+				'participant_email'  => $user_email,
+				'participant_status' => '0',
+				'fk_team'            => '0',
+		);
+
+		//inserting data to db and get result id
+		$result_id = $this->participant_model->add($data1);
+
+		//define array to be inserted to participant_auth table
+		$data2 = array(
+				'username'       => $user_email,
+				'password'       => $user_password,
+				'fk_participant' => $result_id,
+				'status'         => '1',
+		);
+
+		//inserting data to db
+		$this->participant_auth_model->add($data2);
+
+		//redirect success page
 
 		redirect('/participant/login','refresh');
 
 		
 	}
+
 
 	//Add team member action
 	public function add_member()
@@ -377,7 +441,7 @@ class Participant extends CI_Controller {
 					redirect('/participant/dashboard');
 
 				}else{
-					$this->form_validation->set_message('check', 'Invalid username or password');
+					
 					redirect('/participant/login');
 				}
 			}
