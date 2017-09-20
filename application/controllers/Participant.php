@@ -441,8 +441,10 @@ class Participant extends CI_Controller {
 					redirect('/participant/dashboard');
 
 				}else{
-					
-					redirect('/participant/login');
+					$data['error_msg'] = "Login Gagal, Username atau kata sandi anda salah";					
+					$this->load->view('templates/header-participant');
+		        	$this->load->view('pages/login',$data);
+		        	$this->load->view('templates/footer');
 				}
 			}
 	}

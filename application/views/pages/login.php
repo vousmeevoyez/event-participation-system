@@ -12,10 +12,8 @@
 							<div class="inner">
 								<h2 class="major" style="text-align: center;">Login</h2>
 								<?php 
-									    if(!empty($success_msg)){
-									        echo '<p class="statusMsg">'.$success_msg.'</p>';
-									    }elseif(!empty($error_msg)){
-									        echo '<p class="statusMsg">'.$error_msg.'</p>';
+									   	if(!empty($error_msg)){
+									        echo '<p style="color:palevioletred;">'.$error_msg.'</p>';
 									    }
 								?>
 								<?php echo validation_errors('<p style="color:palevioletred;">','</p>'); ?>
