@@ -42,8 +42,8 @@ class Participant extends CI_Controller {
 
 	public function signup()
 	{
-		$this->form_validation->set_rules('user_name', 'Name', 'required|valid_email');
-    	$this->form_validation->set_rules('user_email', 'Email', 'required');
+		$this->form_validation->set_rules('user_name', 'Name', 'required');
+    	$this->form_validation->set_rules('user_email', 'Email', 'required|valid_email');
     	$this->form_validation->set_rules('user_password', 'Password', 'required');
     	
     	if ($this->form_validation->run() == FALSE)
@@ -54,7 +54,7 @@ class Participant extends CI_Controller {
         }
         else
         {
-        	$this->check();
+        	$this->add();
         }
 	}
 	
@@ -271,6 +271,9 @@ class Participant extends CI_Controller {
 		$this->participant_auth_model->add($data2);
 
 		//redirect success page
+
+		redirect('/participant/login','refresh');
+
 		
 	}
 

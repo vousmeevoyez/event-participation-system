@@ -23,6 +23,8 @@
 								<ul class="actions">
 									<li><input type="submit" value="LOGIN" /></li>
 								</ul>
+								<p><sub><a href="<?=base_url('participant/signup');?>">Lupa password</sub></a></p>
+								<p><sub><a href="<?=base_url('participant/signup');?>">Belum punya akun?</sub></a></p>
 								<?php echo form_close();?> 	
 							</div>
 						</header>
