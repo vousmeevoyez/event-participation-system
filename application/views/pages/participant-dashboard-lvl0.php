@@ -18,7 +18,7 @@
                                             </div>
 
                                              <div class="col-xs-12 col-sm-6 emphasis">                    
-                                                <a href="<?=base_url('participant/faq');?>"><p><small>Frequently Asked Questions</small></p></a>
+                                                <a href="<?=base_url('participant/account_info');?>"><p><small>Account Information</small></p></a>
                                             </div>
                                         </div>
                                     </div>

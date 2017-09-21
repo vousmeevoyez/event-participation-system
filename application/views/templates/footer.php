@@ -16,7 +16,7 @@
 													<div class="12u$"><a href="#" class="sponsor-link"><span class="image fit"><img src="<?=base_url('assets/pages/img/medpart.png');?>" alt="" /></span></a></div>-->
 											</div>
 
-											<div class="4u$ 12u$(medium)">
+											<div class="4u 12u$(medium)">
 												<h2 class="center-footer-heading">Social Media</h2>
 												<ul class="contact">
 													<li class="fa-facebook"><a href="https://www.facebook.com/hifest17/?fref=ts">facebook.com/hifest17</a></li>

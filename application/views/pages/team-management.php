@@ -23,17 +23,14 @@
                                             </div>              
                                         </div>            
                                         <div class="col-xs-12 divider text-center">
-                                            <div class="col-xs-12 col-sm-4 emphasis">                    
+                                            <div class="col-xs-12 col-sm-6 emphasis">                    
                                                 <a href="<?=base_url('participant/add_member_form');?>"><button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Tambah Anggota</button></a>
                                             </div>
                                             <?php if($team_status == 'Telah Diverifikasi'){?>
-                                            <div class="col-xs-12 col-sm-4 emphasis">                    
+                                            <div class="col-xs-12 col-sm-6 emphasis">                    
                                                 <a href="<?=base_url('participant/proposal');?>"><button class="btn btn-info btn-block"><span class="fa fa-plus-circle"></span> Submit Dokumen</button></a>
                                             </div>
                                             <?php } ?>
-                                            <div class="col-xs-12 col-sm-4 emphasis">                    
-                                                <a href="<?=base_url('participant/faq');?>"><p><small>Frequently Asked Questions</small></p></a>
-                                            </div>
                                         </div>
                                         </div>
                                     </div>

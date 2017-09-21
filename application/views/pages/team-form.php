@@ -17,7 +17,6 @@
                                         <option value="sd">Software Development</option>
                                         <option value="bp">Business Plan</option>
                                         <option value="sm">Short Movie</option>
-                                        <option value="f">Futsal</option>
                                     </select>
                                 </div>
                                 <ul class="actions">

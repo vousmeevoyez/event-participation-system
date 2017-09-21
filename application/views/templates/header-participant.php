@@ -34,6 +34,7 @@
                             <ul class="links">
                                 <li><a href="<?=base_url('home');?>">Home</a></li>
                                 <li><a href="<?=base_url('pages/view/login');?>">Dashboard</a></li>
+                                <li><a href="<?=base_url('participant/faq');?>">FAQ</a></li>
                                 <li><a href="<?=base_url('participant/logout');?>">Logout</a></li>
                             </ul>
                             <a href="#" class="close">Close</a>

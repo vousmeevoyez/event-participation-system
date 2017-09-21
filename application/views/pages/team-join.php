@@ -12,7 +12,7 @@
                                     <input type="text" name="fk_team" id="name" placeholder="Kode join tim" />
                                 </div>
                                 <ul class="actions">
-                                    <li><input type="submit" value="submit" /></li>
+                                    <li><input type="submit" value="Gabung Tim" /></li>
                                 </ul>
                             </form>
                             </div>

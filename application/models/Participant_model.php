@@ -63,9 +63,11 @@ class Participant_model extends CI_Model
 		
 	}
  
-	public function update($where, $data)
+	public function update($data)
 	{
-		$this->db->update($this->table, $data, $where);
+		$this->db->set($data);
+		$this->db->	where('pk_participant',$data['pk_participant']);
+		$this->db->update($this->table);
 		return $this->db->affected_rows();
 	}
 

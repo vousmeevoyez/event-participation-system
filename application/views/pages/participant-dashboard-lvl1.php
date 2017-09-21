@@ -5,7 +5,7 @@
     							<div class="box alt">
     								<div class="well profile">
                                         <div class="col-sm-12">
-                                            <div class="col-xs-12 col-sm-8">
+                                            <div class="col-xs-12 col-sm-12">
                                                 <h2 class="custom-heading">Hi <?php echo $participant_name;?> :)</h2>
                                                 <p><strong>Email: </strong><?php echo $participant_email;?></p>
                                                 <p><strong>Team: </strong><?php echo $team;?></p>
@@ -20,7 +20,7 @@
                                                 <a href="<?=base_url('participant/join_team_form');?>"><button class="btn btn-info btn-block"><span class="fa fa-plus-circle"></span> Gabung Tim</button></a>
                                             </div>
                                              <div class="col-xs-12 col-sm-4 emphasis">                    
-                                                <a href="<?=base_url('participant/faq');?>"><p><small>Frequently Asked Questions</small></p></a>
+                                                <a href="<?=base_url('participant/account_info');?>"><p><small>Account Information</small></p></a>
                                             </div>
                                         </div>
                                     </div>
