@@ -6,7 +6,7 @@ class Participant extends CI_Controller {
 	public function __construct()
 	{
 	 		parent::__construct();
-			$this->load->helper(array('url','form'));
+			$this->load->helper(array('url','form','file'));
 
 			$this->load->library('form_validation');
 
@@ -19,6 +19,15 @@ class Participant extends CI_Controller {
         $this->load->view('pages/competition');
         $this->load->view('templates/footer');
 	}
+
+	// Display payment page
+	public function payment()
+	{
+        $this->load->view('templates/header-participant');
+        $this->load->view('pages/payment');
+        $this->load->view('templates/footer');
+	}
+
 	// display login form
 	public function login()
 	{
@@ -59,6 +68,7 @@ class Participant extends CI_Controller {
 		$this->form_validation->set_rules('participant_university', 'University', 'required|alpha_numeric_spaces');
     	$this->form_validation->set_rules('participant_msisdn', 'Phone Number', 'required|numeric|min_length[11]|max_length[12]');
     	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
+    	$this->form_validation->set_rules('participant_file', 'participant_file', 'required');
 
     	// checking whether the submitted data is valid or not
     	if ($this->form_validation->run() == FALSE){
@@ -67,8 +77,7 @@ class Participant extends CI_Controller {
         	$this->load->view('pages/register-details');
         	$this->load->view('templates/footer');
         }else{
-        	//redirect to another method
-        	$this->update_details();
+        		$this->update_details();
         }
 	}
 	
@@ -157,8 +166,21 @@ class Participant extends CI_Controller {
 			$view['participant_university'] = $participant_data->participant_univ 	;
 			$view['participant_msisdn']     = $participant_data->participant_msisdn;
 			$view['participant_idcard']     = $participant_data->participant_idcard;
-			$view['team']              = 'Belum ada';
-			$view['status'] 		   = 'Telah Diverifikasi';
+			$view['team']              		= 'Belum ada';
+			$view['status'] 		   		= 'Telah Diverifikasi';
+			$view['position']				= 'Belum ada';
+
+			if($fk_team != 0 ){
+				//Get the team where the participant belongs
+				$team_data    = $this->team_model->get_by_fk($fk_team);
+				$view['team'] = $team_data->team_name;
+				$leader_id = $team_data->fk_participant;
+				if($leader_id == $pk_participant){
+					$view['position'] = 'Ketua Tim';
+				}else{
+					$view['position'] = 'Anggota Tim';
+				}			
+			}
 
 			//render page
 			$this->load->view('templates/header-participant');
@@ -189,11 +211,18 @@ class Participant extends CI_Controller {
     	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
     	
     	if ($this->form_validation->run() == FALSE){
-        	$this->load->view('templates/header');
+        	$this->load->view('templates/header-participant');
         	$this->load->view('pages/team-member');
         	$this->load->view('templates/footer');
         }else{
-        	$this->add_member();
+        	if (! empty($_FILES['participant_file']['name'])) {
+        		$this->add_member();
+			}else{
+				$data['error_msg'] = 'Harap upload dokumen yang diperlukan untuk melanjutkan';
+        		$this->load->view('templates/header-participant');
+	        	$this->load->view('pages/team-member',$data);
+	        	$this->load->view('templates/footer');
+        	}
         }
 	}
 
@@ -213,12 +242,15 @@ class Participant extends CI_Controller {
 		$member_data = $this->participant_model->get_by_team($pk_team);
 		$view['member_data'] = $member_data;
 
+		//count member
+		$view['member_count'] = $this->participant_model->count_member($pk_team);
+
 		//get leader information
 		$view['team_leader'] = $participant_data->participant_name;
 		//get pk team
 		$view['pk_team']     = $pk_team;
 		//get team status
-		$view['team_status'] = 'Belum Diverifikasi';
+		$view['team_status'] = 'Menunggu Pembayaran';
 		//get team name
 		$view['team_name']   = $team_data->team_name;
 
@@ -362,7 +394,6 @@ class Participant extends CI_Controller {
 
 			if($this->upload->do_multi_upload("participant_file")) {
 				//Code to run upon successful upload.
-
 				$data = array(
 					'pk_participant'		=> $pk_participant,
 					'participant_univ' 		=> $participant_univ ,
@@ -390,9 +421,9 @@ class Participant extends CI_Controller {
 			}
 		}else{
 			$data['error_msg'] = 'Upload gagal';
-						$this->load->view('templates/header-participant');
-						$this->load->view('pages/register-details',$data);
-						$this->load->view('templates/footer');
+			$this->load->view('templates/header-participant');
+			$this->load->view('pages/register-details',$data);
+			$this->load->view('templates/footer');
 		}
 	}
 
@@ -419,55 +450,61 @@ class Participant extends CI_Controller {
 		$participant_msisdn 	= $this->input->post('participant_msisdn');
 		$participant_idcard 	= $this->input->post('participant_id');
 
+		//upload config
+		$participant_folder = $config['upload_path'] = './uploads/participant/'.$pk_participant;
+		$config['allowed_types'] 	= 'jpg|jpeg|png|pdf';
+		$config['max_size']      	= 2048 ;
 
-			//upload config
-			$participant_folder = $config['upload_path'] = './uploads/participant/'.$pk_participant;
-			$config['allowed_types'] 	= 'jpg|jpeg|png|pdf';
-			$config['max_size']      	= 2048 ;
+		//load upload library and initialize config
+		$this->load->library('upload',$config);
+		$this->upload->initialize($config);
 
-			//load upload library and initialize config
-			$this->load->library('upload',$config);
-			$this->upload->initialize($config);
+		if($this->upload->do_multi_upload("participant_file")) {
+			//Code to run upon successful upload.
 
-			if($this->upload->do_multi_upload("participant_file")) {
-				//Code to run upon successful upload.
+			$data = array(
+				'fk_team'				=> $fk_team,
+				'participant_name' 		=> $participant_name ,
+				'participant_email' 	=> $participant_email,
+				'participant_univ' 		=> $participant_univ ,
+				'participant_msisdn' 	=> $participant_msisdn,
+				'participant_idcard' 	=> $participant_idcard,
+				'participant_folder' 	=> $participant_folder,
+				'participant_status'    => 1 
+			);
 
-				$data = array(
-					'fk_team'				=> $fk_team,
-					'participant_name' 		=> $participant_name ,
-					'participant_email' 	=> $participant_email,
-					'participant_univ' 		=> $participant_univ ,
-					'participant_msisdn' 	=> $participant_msisdn,
-					'participant_idcard' 	=> $participant_idcard,
-					'participant_folder' 	=> $participant_folder,
-					'participant_status'    => 1 
-				);
+			$status = $this->participant_model->add($data);
 
-				$status = $this->participant_model->add($data);
-
-					if($status != 0){
-						$this->dashboard();
-					}else{
-						$data['error_msg'] = $status;
-						$this->load->view('templates/header-participant');
-						$this->load->view('pages/team-member',$data);
-						$this->load->view('templates/footer');		
-					}
-			}else{
-				$data['error_msg'] = $this->uploads->display_errors();
-				$this->load->view('templates/header-participant');
-				$this->load->view('pages/team-member',$data);
-				$this->load->view('templates/footer');
-			}
+				if($status != 0){
+					$this->team_management();
+				}else{
+					$data['error_msg'] = $status;
+					$this->load->view('templates/header-participant');
+					$this->load->view('pages/team-management',$data);
+					$this->load->view('templates/footer');		
+				}
+		}else{
+			$data['error_msg'] = $this->uploads->display_errors();
+			$this->load->view('templates/header-participant');
+			$this->load->view('pages/team-member',$data);
+			$this->load->view('templates/footer');
+		}
 	}
 
 
 	//ROUTING TO JOIN TEAM FORM
 	public function join_team_form()
 	{
-		$this->load->view('templates/header-participant');
-        $this->load->view('pages/team-join');
-        $this->load->view('templates/footer');
+		//form validation
+		$this->form_validation->set_rules('fk_team', 'Join Code', 'required|numeric');
+    	
+    	if ($this->form_validation->run() == FALSE){
+        	$this->load->view('templates/header-participant');
+        	$this->load->view('pages/team-join');
+        	$this->load->view('templates/footer');
+        }else{
+        	$this->join_team();
+        }
 	}
 
 	public function proposal()
@@ -485,16 +522,27 @@ class Participant extends CI_Controller {
 		//retrieve fk team
 		$fk_team = $this->input->post('fk_team');
 
-		//define array
-		$data = array(
-			'pk_participant' => $pk_participant,
-			'fk_team' => $fk_team 
-		);
+		$count_member = $this->participant_model->count_member($fk_team);
 
-		//update operation
-		$this->participant_model->update_team($data);
-		//redirect page
-		redirect('/participant/dashboard','refresh');
+		if($count_member < 3){
+			//define array
+			$data = array(
+				'pk_participant' => $pk_participant,
+				'fk_team' => $fk_team 
+			);
+
+			//update operation
+			$this->participant_model->update_team($data);
+			//redirect page
+			redirect('/participant/dashboard','refresh');
+		}else{
+			$data['error_msg'] = 'Team Telah Penuh, silahkan bergabung dengan tim lain';
+			$this->load->view('templates/header-participant');
+	        $this->load->view('pages/team-join',$data);
+	        $this->load->view('templates/footer');
+		}
+
+		
 	}
 
 	//AUTH METHOD

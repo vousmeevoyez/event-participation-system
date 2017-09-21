@@ -13,6 +13,7 @@
                                                 <p><strong>Phone: </strong><br><?php echo $participant_msisdn;?></p>
                                                 <p><strong>ID Card: </strong><br><?php echo $participant_idcard;?></p>
                                                 <p><strong>Team: </strong><br><?php echo $team;?></p>
+                                                <p><strong>Posisi: </strong><br><?php echo $position;?></p>
                                                 <p><strong>Status Akun: </strong><br><?php echo $status;?> </p>
                                             </div>             
                                         </div>            

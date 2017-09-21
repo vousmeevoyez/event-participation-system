@@ -58,6 +58,8 @@ class Team_model extends CI_Model
 		$this->db->where('pk_team', $id);
 		$this->db->delete($this->table);
 	}
+
+
  
  
 }

@@ -84,6 +84,16 @@ class Participant_model extends CI_Model
 		$this->db->where('pk_participant', $id);
 		$this->db->delete($this->table);
 	}
+
+	public function count_member($fk_team)
+	{
+		$this->db->select('*');
+		$this->db->from($this->table);
+		$this->db->where('fk_team',$fk_team);
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
  
  
 }

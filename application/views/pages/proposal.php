@@ -11,11 +11,10 @@
       												<?php echo form_open_multipart('file/do_upload');?> 
 												<form method="" action="">
 													<div class="field">
-														<label for="name">File </label>
 														<input type="file" name="userfile"/>
 													</div>
 													<ul class="actions">
-														<li><input type="submit" value="SUBMIT" /></li>
+														<li><input type="submit" value="Upload berkas" /></li>
 													</ul>
 												</form>
 											</div>
