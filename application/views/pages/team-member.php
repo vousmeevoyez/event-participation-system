@@ -37,12 +37,12 @@
                                 </div>
                                 <div class="field">
                                     <label for="name">Pas Foto</label>
-                                    <input type="file" name="participant_file[]"/>
+                                    <input type="file" name="participant_photo"/>
                                     <p class="upload-desc">Ukuran file maksimum 2MB (JPG/JPEG/PNG)</p>
                                 </div>
                                 <div class="field">
                                     <label for="name">Dokumen KRS</label>
-                                    <input type="file" name="participant_file[]"/>
+                                    <input type="file" name="participant_doc"/>
                                     <p class="upload-desc">Ukuran file maksimum 2MB (JPG/JPEG/PNG)</p>
                                 </div>
                                 <ul class="actions">

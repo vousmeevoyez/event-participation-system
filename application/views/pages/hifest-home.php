@@ -51,7 +51,7 @@
 									</div>
 								</div>
 							</section>
-							<!-- Four -->
+							<!-- Four 
 							<section id="three" class="wrapper alt spotlight style4">
 								<div class="inner">
 									<a href="#" class="image"><img src="<?=base_url('assets/pages/img/futsal_icon.png');?>" alt="" /></a>
@@ -61,4 +61,4 @@
 										<a href="<?=base_url('pages/view/futsal');?>" class="special">Learn more</a>
 									</div>
 								</div>
-							</section>
+							</section>-->

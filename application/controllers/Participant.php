@@ -12,21 +12,6 @@ class Participant extends CI_Controller {
 
 	 		$this->load->model(array('participant_auth_model','participant_model','team_model'));
 	}
-	// Display available competition
-	public function competition_list()
-	{
-        $this->load->view('templates/header');
-        $this->load->view('pages/competition');
-        $this->load->view('templates/footer');
-	}
-
-	// Display payment page
-	public function payment()
-	{
-        $this->load->view('templates/header-participant');
-        $this->load->view('pages/payment');
-        $this->load->view('templates/footer');
-	}
 
 	// display login form
 	public function login()
@@ -68,7 +53,8 @@ class Participant extends CI_Controller {
 		$this->form_validation->set_rules('participant_university', 'University', 'required|alpha_numeric_spaces');
     	$this->form_validation->set_rules('participant_msisdn', 'Phone Number', 'required|numeric|min_length[11]|max_length[12]');
     	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
-    	$this->form_validation->set_rules('participant_file', 'participant_file', 'required');
+    	$this->form_validation->set_rules('participant_photo', 'Your Photo', 'callback_file_check_photo');
+    	$this->form_validation->set_rules('paritcipant_doc', 'Document', 'callback_file_check_doc');
 
     	// checking whether the submitted data is valid or not
     	if ($this->form_validation->run() == FALSE){
@@ -123,6 +109,13 @@ class Participant extends CI_Controller {
 						$view['team_type'] = 'Futsal';
 					}
 
+					/**
+					*		DASHBOARD LEVEL 
+							0 = It means he join a team
+							1 = it means he isn't join any team or create any team yet
+							2 = it means he is create a team  
+					*/
+
 					//team leader level
 					if($team_leader == $pk_participant){
 						$this->load->view('templates/header-participant');
@@ -149,6 +142,7 @@ class Participant extends CI_Controller {
         
 	}
 
+	// Display account information details
 	public function account_info()
 	{
 		//Checking user session
@@ -189,9 +183,7 @@ class Participant extends CI_Controller {
 		}
 	}
 
-
-
-	//Routing to add new team form
+	//Display add new team form
 	public function add_team_form()
 	{
 		//render page
@@ -200,7 +192,7 @@ class Participant extends CI_Controller {
         $this->load->view('templates/footer');
 	}
 
-	//Routing to add new member form
+	//Display add new member form
 	public function add_member_form()
 	{
 		//form validation
@@ -209,6 +201,8 @@ class Participant extends CI_Controller {
     	$this->form_validation->set_rules('participant_university', 'University', 'required|alpha_numeric_spaces');
     	$this->form_validation->set_rules('participant_msisdn', 'Phone Number', 'required|numeric|min_length[11]|max_length[12]');
     	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
+    	$this->form_validation->set_rules('participant_photo', 'Your Photo', 'callback_file_check_photo');
+    	$this->form_validation->set_rules('paritcipant_doc', 'Document', 'callback_file_check_doc');
     	
     	if ($this->form_validation->run() == FALSE){
         	$this->load->view('templates/header-participant');
@@ -226,6 +220,7 @@ class Participant extends CI_Controller {
         }
 	}
 
+	// Display team management page
 	public function team_management()
 	{
 		//get PK participant from session 
@@ -274,6 +269,7 @@ class Participant extends CI_Controller {
         $this->load->view('templates/footer');
 	}
 
+	// display team information page only for a team member
 	public function team_info()
 	{
 		//get pk participant from session
@@ -323,13 +319,50 @@ class Participant extends CI_Controller {
         $this->load->view('templates/footer');
 	}
 
-	//FAQ Page routing
+	// Display payment page
+	public function payment()
+	{
+        $this->load->view('templates/header-participant');
+        $this->load->view('pages/payment');
+        $this->load->view('templates/footer');
+	}
+
+	//Display FAQ page
 	public function faq()
 	{
         $this->load->view('templates/header-participant');
         $this->load->view('pages/faq');
         $this->load->view('templates/footer');
 	}
+
+	//Dsiplay join team form page 
+	public function join_team_form()
+	{
+		//form validation
+		$this->form_validation->set_rules('fk_team', 'Join Code', 'required|numeric');
+    	
+    	if ($this->form_validation->run() == FALSE){
+        	$this->load->view('templates/header-participant');
+        	$this->load->view('pages/team-join');
+        	$this->load->view('templates/footer');
+        }else{
+        	$this->join_team();
+        }
+	}
+
+	// Display submit document form page
+	public function proposal()
+	{
+		$this->load->view('templates/header-participant');
+        $this->load->view('pages/proposal');
+        $this->load->view('templates/footer');
+	}
+
+
+	/*
+		DATA MANIPULATION METHOD
+
+	*/
 
 	//ADD PARTICIPANT ACTION
 	public function add()
@@ -369,7 +402,7 @@ class Participant extends CI_Controller {
 		
 	}
 
-		//ADD PARTICIPANT ACTION
+	//UPDATE USER ACCOUNT DETAILS like msisdn, university, id card, etc....
 	public function update_details()
 	{
 		//get pk participant
@@ -380,47 +413,59 @@ class Participant extends CI_Controller {
 		$participant_msisdn 	= $this->input->post('participant_msisdn');
 		$participant_idcard 	= $this->input->post('participant_id');
 
-		if(!is_dir('/uploads/participant/'.$pk_participant)){
-			mkdir('./uploads/participant/' . $pk_participant, 0777, TRUE);
+		//upload config
+		$config['upload_path'] = './uploads/participants/';
+		$config['allowed_types'] 	= 'jpg|jpeg|png|pdf';
+		$config['max_size']      	= 2048 ;
 
-			//upload config
-			$participant_folder = $config['upload_path'] = './uploads/participant/'.$pk_participant;
-			$config['allowed_types'] 	= 'jpg|jpeg|png|pdf';
-			$config['max_size']      	= 2048 ;
+		//load upload library and initialize config
+		$this->load->library('upload',$config);
+		$this->upload->initialize($config);
 
-			//load upload library and initialize config
-			$this->load->library('upload',$config);
-			$this->upload->initialize($config);
+		//Code to run upon successful upload photo
+		if($this->upload->do_upload("participant_photo")) {
+			$upload_data 	   = $this->upload->data();
+			$participant_photo = $upload_data['file_name'];
 
-			if($this->upload->do_multi_upload("participant_file")) {
-				//Code to run upon successful upload.
+			//Code to run upon successful upload document
+			if($this->upload->do_upload("participant_doc")){
+				$upload_data 	 = $this->upload->data();
+				$participant_doc = $upload_data['file_name'];
+
+				//build data array to be inserted to database
 				$data = array(
 					'pk_participant'		=> $pk_participant,
 					'participant_univ' 		=> $participant_univ ,
 					'participant_msisdn' 	=> $participant_msisdn,
 					'participant_idcard' 	=> $participant_idcard,
-					'participant_folder' 	=> $participant_folder,
+					'participant_photo' 	=> $participant_photo,
+					'participant_doc'		=> $participant_doc,
 					'participant_status'    => 1 
 				);
 
-				$status = $this->participant_model->update($data);
-
-					if($status != 0){
-						$this->dashboard();
-					}else{
-						$data['error_msg'] = 'Upload gagal';
-						$this->load->view('templates/header-participant');
-						$this->load->view('pages/register-details',$data);
-						$this->load->view('templates/footer');		
-					}
+				//check query status
+				$query_status = $this->participant_model->update($data);
+				if($query_status != 0){
+					$this->dashboard();
+				//error conditional if query failed
+				}else{
+					$data['error_msg'] = 'Insert Failed';
+					$this->load->view('templates/header-participant');
+					$this->load->view('pages/register-details',$data);
+					$this->load->view('templates/footer');		
+				}
+			//Error conditional if upload failed
 			}else{
-				$data['error_msg'] = 'Upload gagal';
+				$error = $this->upload->display_errors();
+				$data['error_msg'] = $error;
 				$this->load->view('templates/header-participant');
 				$this->load->view('pages/register-details',$data);
 				$this->load->view('templates/footer');
 			}
+		//Error conditional if upload failed
 		}else{
-			$data['error_msg'] = 'Upload gagal';
+			$error = $this->upload->display_errors();
+			$data['error_msg'] = $error;
 			$this->load->view('templates/header-participant');
 			$this->load->view('pages/register-details',$data);
 			$this->load->view('templates/footer');
@@ -491,60 +536,6 @@ class Participant extends CI_Controller {
 		}
 	}
 
-
-	//ROUTING TO JOIN TEAM FORM
-	public function join_team_form()
-	{
-		//form validation
-		$this->form_validation->set_rules('fk_team', 'Join Code', 'required|numeric');
-    	
-    	if ($this->form_validation->run() == FALSE){
-        	$this->load->view('templates/header-participant');
-        	$this->load->view('pages/team-join');
-        	$this->load->view('templates/footer');
-        }else{
-        	$this->join_team();
-        }
-	}
-
-	public function proposal()
-	{
-		$this->load->view('templates/header-participant');
-        $this->load->view('pages/proposal');
-        $this->load->view('templates/footer');
-	}
-
-	//JOIN TEAM METHOD
-	public function join_team()
-	{
-		//get pk participant from session
-		$pk_participant = $this->session->userdata['logged_in']['pk_participant'];
-		//retrieve fk team
-		$fk_team = $this->input->post('fk_team');
-
-		$count_member = $this->participant_model->count_member($fk_team);
-
-		if($count_member < 3){
-			//define array
-			$data = array(
-				'pk_participant' => $pk_participant,
-				'fk_team' => $fk_team 
-			);
-
-			//update operation
-			$this->participant_model->update_team($data);
-			//redirect page
-			redirect('/participant/dashboard','refresh');
-		}else{
-			$data['error_msg'] = 'Team Telah Penuh, silahkan bergabung dengan tim lain';
-			$this->load->view('templates/header-participant');
-	        $this->load->view('pages/team-join',$data);
-	        $this->load->view('templates/footer');
-		}
-
-		
-	}
-
 	//AUTH METHOD
 	public function check()
 	{
@@ -584,12 +575,79 @@ class Participant extends CI_Controller {
 
 				}else{
 					$data['error_msg'] = "Login Gagal, Username atau kata sandi anda salah";					
-					$this->load->view('templates/header-participant');
+					$this->load->view('templates/header');
 		        	$this->load->view('pages/login',$data);
 		        	$this->load->view('templates/footer');
 				}
 			}
 	}
+
+	//JOIN TEAM METHOD
+	public function join_team()
+	{
+		//get pk participant from session
+		$pk_participant = $this->session->userdata['logged_in']['pk_participant'];
+		//retrieve fk team
+		$fk_team = $this->input->post('fk_team');
+
+		$count_member = $this->participant_model->count_member($fk_team);
+
+		if($count_member < 3){
+			//define array
+			$data = array(
+				'pk_participant' => $pk_participant,
+				'fk_team' => $fk_team 
+			);
+
+			//update operation
+			$this->participant_model->update_team($data);
+			//redirect page
+			redirect('/participant/dashboard','refresh');
+		}else{
+			$data['error_msg'] = 'Team Telah Penuh, silahkan bergabung dengan tim lain';
+			$this->load->view('templates/header-participant');
+	        $this->load->view('pages/team-join',$data);
+	        $this->load->view('templates/footer');
+		}
+
+		
+	}
+
+	//FILE CHECKING photo
+	public function file_check_photo($str){
+		echo $str;
+        $allowed_mime_type_arr = array('application/pdf','image/gif','image/jpeg','image/pjpeg','image/png','image/x-png');
+        $mime = get_mime_by_extension($_FILES['participant_photo']['name']);
+        if(isset($_FILES['participant_photo']['name']) && $_FILES['participant_photo']['name']!=""){
+            if(in_array($mime, $allowed_mime_type_arr)){
+                return true;
+            }else{
+                $this->form_validation->set_message('file_check_photo', 'Harap hanya masukan file dengan jenis pdf/gif/jpg/png.');
+                return false;
+            }
+        }else{
+            $this->form_validation->set_message('file_check_photo', 'Harap upload pas foto.');
+            return false;
+        }
+    }
+
+    	//FILE CHECKING document
+	public function file_check_doc($str){
+		echo $str;
+        $allowed_mime_type_arr = array('application/pdf','image/gif','image/jpeg','image/pjpeg','image/png','image/x-png');
+        $mime = get_mime_by_extension($_FILES['participant_doc']['name']);
+        if(isset($_FILES['participant_doc']['name']) && $_FILES['participant_doc']['name']!=""){
+            if(in_array($mime, $allowed_mime_type_arr)){
+                return true;
+            }else{
+                $this->form_validation->set_message('file_check_doc', 'Harap hanya masukan file dengan jenis pdf/gif/jpg/png.');
+                return false;
+            }
+        }else{
+            $this->form_validation->set_message('file_check_doc', 'Harap upload berkas dokumen yang diperlukan.');
+            return false;
+        }
+    }
 
 	//LOGOUT METHOD
 	public function logout()
