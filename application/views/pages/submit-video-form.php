@@ -1,21 +1,21 @@
-<?php echo form_open_multipart('participant/submit_form');?> 
+<?php echo form_open_multipart('participant/submit_video_form');?> 
 				<!-- Wrapper -->
 					<section id="wrapper">
 										<header>
 											<div class="inner">
-												<h2 class="competition-heading">SUBMIT DOKUMEN</h2>
+												<h2 class="competition-heading">SUBMIT VIDEO</h2>
 												<?php echo validation_errors('<p style="color:palevioletred;">','</p>');?>
 											<?php 
 		                                        if(!empty($error_msg)){
 		                                            echo '<p style="color:palevioletred;">'.$error_msg.'</p>';
 		                                        }
                                 			?>
-													<p class="competition-desc">Silahkan lampirkan file yang ingin disubmit untuk kompetisi HIFEST 2017.<br>Jenis file yang diperbolehkan adalah doc, docx, pdf (Maks 4 MB)</p>
+													<p class="competition-desc">Silahkan masukan url video yang ingin disubmit untuk kompetisi HIFEST 2017.</p>
 													<div class="field">
-														<input type="file" name="team_doc"/>
+														<input type="text" name="team_doc"/>
 													</div>
 													<ul class="actions">
-														<li><input type="submit" value="Upload berkas" /></li>
+														<li><input type="submit" value="Submit URL" /></li>
 													</ul>
 											</div>
 										</header>

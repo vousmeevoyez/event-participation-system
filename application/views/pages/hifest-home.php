@@ -30,9 +30,7 @@
 									<a href="#" class="image"><img src="<?=base_url('assets/pages/img/business_icon.png');?>" alt="" /></a>
 									<div class="content">
 										<h2 class="major">BUSSINESS PLAN</h2>
-										<p>Kegiatan perlombaan antar mahasiswa dalam mengkonsep perencanaan bisnis
-										dan menjalankanya dalam bidang teknologi dengan tema technopreneur. Technopreneur
-										yaitu seseorang yang memiliki bisnis/rencana bisnis berbasis teknologi.</p>
+										<p>Business Plan Competition (BPC) merupakan salah satu rangkaian acara HIFEST 2017 dimana peserta dituntut untuk mengembangkan ide bisnis yang feasible dan inovatif untuk kemudian dipresentasikan dihadapan dewan juri setelah mengikuti serangkaian seleksi. </p>
 										<a href="<?=base_url('pages/view/bussiness-plan');?>" class="special">Learn more</a>
 									</div>
 								</div>

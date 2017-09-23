@@ -4,13 +4,8 @@
 										<header>
 											<div class="inner">
 												<h2 class="competition-heading">SOFTWARE DEVELOPMENT COMPETITION</h2>
-													<p class="competition-desc">Kegiataan perlombaan bagi mahasiswa yang memiliki minat
-													dalam bidang pengembangan perangkat lunak yang berguna untuk menyelesaikan masalah yang ada di masyarakat,
-													dengan mengimplementasikannya ke dalam sebuah aplikasi. Dengan adanya kompetisi ini diharapkan mampu menumbuhkan semangat berkompetisi
-													serta memperdalam ilmu di
-													bidang IT khususnya dalam menciptakan aplikasi yang dapat
-													memberikan solusi untuk memenuhi kebutuhan di Indonesia.</p>
-												<a href="<?=base_url('/pages/download/hifest_rulebook.pdf');?>"><h3>Download Rulebook</h3></a>
+													<p class="competition-desc">Kompetisi Software Development adalah kompetisi mengembangkan sebuah software yang tepat dalam menyelesaikan masalah-masalah sesuai dengan tema <i>“Smart City For Smart Citizen”</i>. Dalam kompetisi ini yang menjadi fokus adalah ketepatan fungsi software yang dikembangkan, interface, dan kemudahan pengguna ketika sedang menggunakan aplikasi tersebut secara menyeluruh. Lomba ini terdiri atas dua tahap, yaitu tahap penyisihan dan tahap final. Pada tahap penyisihan, tim peserta wajib mengumpulkan proposal yang sudah ditentukan panitia. Proposal tersebut akan digunakan sebagai penilaian untuk bisa lanjut ke tahap final. Pada tahap final, tim peserta wajib menyiapkan laporan lengkap dengan software yang telah dikembangkan dan mempresentasikannya di depan juri.</p>
+												<a href="<?=base_url('/pages/download/rulebook_software_development_hifestuinjkt2017.pdf');?>"><h3>Download Rulebook</h3></a>
 											</div>
 										</header>
 
@@ -59,11 +54,19 @@
 													<tbody>
 														<tr>
 															<td>Pendaftaran</td>
-															<td>1 Agustus - 1 Oktober 2017.</td>
+															<td>13 September – 7 Oktober 2017</td>
 														</tr>
 														<tr>
-															<td>Pelaksanaan</td>
-															<td>13 November - 14 November 2017.</td>
+															<td>Pengumpulan Proposal & Prototype </td>
+															<td>9 Oktober 2017</td>
+														</tr>
+														<tr>
+															<td>Pengumuman Hasil Seleksi</td>
+															<td>16 Oktober 2017</td>
+														</tr>
+														<tr>
+															<td>Final </td>
+															<td>6 November 2017</td>
 														</tr>
 													</tbody>
 												</table>

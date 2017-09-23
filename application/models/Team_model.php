@@ -53,6 +53,14 @@ class Team_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
+	public function update_document($data)
+	{
+		$this->db->set('team_doc',$data['team_doc']);
+		$this->db->	where('pk_team',$data['pk_team']);
+		$this->db->update($this->table);
+		return $this->db->affected_rows();
+	}
+
 	public function delete_by_id($id)
 	{
 		$this->db->where('pk_team', $id);

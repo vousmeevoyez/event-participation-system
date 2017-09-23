@@ -5,12 +5,13 @@ class Participant extends CI_Controller {
 
 	public function __construct()
 	{
-	 		parent::__construct();
-			$this->load->helper(array('url','form','file'));
+		parent::__construct();
+		$this->load->helper(array('url','form','file'));
 
-			$this->load->library('form_validation');
+		$this->load->library('form_validation');
 
-	 		$this->load->model(array('participant_auth_model','participant_model','team_model'));
+		$this->load->model(array('participant_auth_model','participant_model','team_model'));
+
 	}
 
 	// display login form
@@ -49,29 +50,33 @@ class Participant extends CI_Controller {
 	// display participant details form 
 	public function register_details()
 	{
-		// form validation
-		$this->form_validation->set_rules('participant_university', 'University', 'required|alpha_numeric_spaces');
-    	$this->form_validation->set_rules('participant_msisdn', 'Phone Number', 'required|numeric|min_length[11]|max_length[12]');
-    	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
-    	$this->form_validation->set_rules('participant_photo', 'Your Photo', 'callback_file_check_photo');
-    	$this->form_validation->set_rules('paritcipant_doc', 'Document', 'callback_file_check_doc');
+		if ($this->is_login() == true ) {
+			// form validation
+			$this->form_validation->set_rules('participant_university', 'University', 'required|alpha_numeric_spaces');
+	    	$this->form_validation->set_rules('participant_msisdn', 'Phone Number', 'required|numeric|min_length[11]|max_length[12]');
+	    	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
+	    	$this->form_validation->set_rules('participant_photo', 'Your Photo', 'callback_file_check_photo');
+	    	$this->form_validation->set_rules('participant_doc', 'Document', 'callback_file_check_doc');
 
-    	// checking whether the submitted data is valid or not
-    	if ($this->form_validation->run() == FALSE){
-    		//render page
-        	$this->load->view('templates/header-participant');
-        	$this->load->view('pages/register-details');
-        	$this->load->view('templates/footer');
-        }else{
-        		$this->update_details();
-        }
+	    	// checking whether the submitted data is valid or not
+	    	if ($this->form_validation->run() == FALSE){
+	    		//render page
+	        	$this->load->view('templates/header-participant');
+	        	$this->load->view('pages/register-details');
+	        	$this->load->view('templates/footer');
+	        }else{
+	        	$this->update_details();
+	        }
+		}else{
+			redirect('/participant/login');
+		}
+
 	}
 	
 	//display dashboard for participant
 	public function dashboard()
 	{
-		//Checking user session
-		if(isset($this->session->userdata['logged_in'])){
+		if($this->is_login() == true){
 			//GET PK PARTICIPANT FROM SESSION
 			$pk_participant   = $this->session->userdata['logged_in']['pk_participant'];
 			//GET PARTICIPANT INFORMATION such as fk_team and status
@@ -118,35 +123,29 @@ class Participant extends CI_Controller {
 
 					//team leader level
 					if($team_leader == $pk_participant){
-						$this->load->view('templates/header-participant');
 						$this->load->view('pages/participant-dashboard-lvl2',$view);
-						$this->load->view('templates/footer');
 					}else{
 					//Member team level
-						$this->load->view('templates/header-participant');
 						$this->load->view('pages/participant-dashboard-lvl0',$view);
-						$this->load->view('templates/footer');
+						
 					}
-					// New member level doesnt have a team or join a team
 				}else{
-					$this->load->view('templates/header-participant');
+					// New member level doesnt have a team or join a team
 					$this->load->view('pages/participant-dashboard-lvl1',$view);
-					$this->load->view('templates/footer');
-				}	
-			}
+				}
+			}	
 
+				$this->load->view('templates/header-participant');
+				$this->load->view('templates/footer');
 		}else{
-			//Redirect to login form
-			redirect('pages/view/login');
+			redirect('/participant/login');
 		}
-        
 	}
 
 	// Display account information details
 	public function account_info()
 	{
-		//Checking user session
-		if(isset($this->session->userdata['logged_in'])){
+		if($this->is_login() == true){
 			//GET PK PARTICIPANT FROM SESSION
 			$pk_participant   = $this->session->userdata['logged_in']['pk_participant'];
 			//GET PARTICIPANT INFORMATION such as fk_team and status
@@ -180,182 +179,248 @@ class Participant extends CI_Controller {
 			$this->load->view('templates/header-participant');
 			$this->load->view('pages/participant-details',$view);
 			$this->load->view('templates/footer');
+		}else{
+			redirect('/participant/login');
 		}
 	}
 
 	//Display add new team form
 	public function add_team_form()
 	{
-		//render page
-        $this->load->view('templates/header-participant');
-        $this->load->view('pages/team-form');
-        $this->load->view('templates/footer');
+		if($this->is_login() == true){
+			//render page
+	        $this->load->view('templates/header-participant');
+	        $this->load->view('pages/team-form');
+	        $this->load->view('templates/footer');
+		}else{
+			redirect('/participant/login');
+		}
 	}
 
 	//Display add new member form
 	public function add_member_form()
 	{
+		if($this->is_login() == true){
 		//form validation
-		$this->form_validation->set_rules('participant_name', 'Email', 'required|alpha_numeric_spaces');
-    	$this->form_validation->set_rules('participant_email', 'Password', 'required|valid_email');
-    	$this->form_validation->set_rules('participant_university', 'University', 'required|alpha_numeric_spaces');
-    	$this->form_validation->set_rules('participant_msisdn', 'Phone Number', 'required|numeric|min_length[11]|max_length[12]');
-    	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
-    	$this->form_validation->set_rules('participant_photo', 'Your Photo', 'callback_file_check_photo');
-    	$this->form_validation->set_rules('paritcipant_doc', 'Document', 'callback_file_check_doc');
-    	
-    	if ($this->form_validation->run() == FALSE){
-        	$this->load->view('templates/header-participant');
-        	$this->load->view('pages/team-member');
-        	$this->load->view('templates/footer');
-        }else{
-        	if (! empty($_FILES['participant_file']['name'])) {
-        		$this->add_member();
-			}else{
-				$data['error_msg'] = 'Harap upload dokumen yang diperlukan untuk melanjutkan';
-        		$this->load->view('templates/header-participant');
-	        	$this->load->view('pages/team-member',$data);
+			$this->form_validation->set_rules('participant_name', 'Email', 'required|alpha_numeric_spaces');
+	    	$this->form_validation->set_rules('participant_email', 'Password', 'required|valid_email');
+	    	$this->form_validation->set_rules('participant_university', 'University', 'required|alpha_numeric_spaces');
+	    	$this->form_validation->set_rules('participant_msisdn', 'Phone Number', 'required|numeric|min_length[11]|max_length[12]');
+	    	$this->form_validation->set_rules('participant_id', 'ID number', 'required|numeric');
+	    	$this->form_validation->set_rules('participant_photo', 'Your Photo', 'callback_file_check_photo');
+	    	$this->form_validation->set_rules('paritcipant_doc', 'Document', 'callback_file_check_doc');
+	    	
+	    	if ($this->form_validation->run() == FALSE){
+	        	$this->load->view('templates/header-participant');
+	        	$this->load->view('pages/team-member');
 	        	$this->load->view('templates/footer');
-        	}
-        }
+	        }else{
+	        		$this->add_member();
+	        }
+		}else{
+			redirect('/participant/login');
+		}
+
 	}
 
 	// Display team management page
 	public function team_management()
 	{
-		//get PK participant from session 
-		$pk_participant   = $this->session->userdata['logged_in']['pk_participant'];
-		//get participant data based on pk participant
-		$participant_data = $this->participant_model->get_by_id($pk_participant);
-		//get team data based on pk participant
-		$team_data  = $this->team_model->get_by_id($pk_participant);
-		$pk_team    = $team_data->pk_team;
-		$status     = $team_data->team_status;
-		$team_type  = $team_data->team_type;
+		if($this->is_login() == true){
+			//get PK participant from session 
+			$pk_participant   = $this->session->userdata['logged_in']['pk_participant'];
+			//get participant data based on pk participant
+			$participant_data = $this->participant_model->get_by_id($pk_participant);
+			//get team data based on pk participant
+			$team_data  = $this->team_model->get_by_id($pk_participant);
+			$pk_team    = $team_data->pk_team;
+			$status     = $team_data->team_status;
+			$team_type  = $team_data->team_type;
 
-		//get member data based on pk participant
-		$member_data = $this->participant_model->get_by_team($pk_team);
-		$view['member_data'] = $member_data;
+			//get member data based on pk participant
+			$member_data = $this->participant_model->get_by_team($pk_team);
+			$view['member_data'] = $member_data;
 
-		//count member
-		$view['member_count'] = $this->participant_model->count_member($pk_team);
+			//count member
+			$view['member_count'] = $this->participant_model->count_member($pk_team);
 
-		//get leader information
-		$view['team_leader'] = $participant_data->participant_name;
-		//get pk team
-		$view['pk_team']     = $pk_team;
-		//get team status
-		$view['team_status'] = 'Menunggu Pembayaran';
-		//get team name
-		$view['team_name']   = $team_data->team_name;
+			//get leader information
+			$view['team_leader'] = $participant_data->participant_name;
+			//get pk team
+			$view['pk_team']     = $pk_team;
+			//get team status
+			$view['team_status'] = 'Menunggu Pembayaran';
+			//get team name
+			$view['team_name']   = $team_data->team_name;
+			$view['team_doc']    = $team_data->team_doc;
 
-		//Checking team status
-		if($status != 0){
-			$view['team_status'] = 'Telah Diverifikasi';
-		}
+			//Checking team status
+			if($status != 0){
+				$view['team_status'] = 'Telah Diverifikasi';
+			}
 
-		// convert team code to team competition type
-		if($team_type == 'sd'){
-			$view['team_type'] = 'Software Development';
-		}else if($team_type == 'bp'){
-			$view['team_type'] = 'Business Plan';
-		}else if($team_type == 'sm'){
-			$view['team_type'] = 'Short Movie';
-		}
+			// convert team code to team competition type
+			if($team_type == 'sd'){
+				$view['team_type'] = 'Software Development';
+			}else if($team_type == 'bp'){
+				$view['team_type'] = 'Business Plan';
+			}else if($team_type == 'sm'){
+				$view['team_type'] = 'Short Movie';
+			}
 
-		// render page
-        $this->load->view('templates/header-participant');
-        $this->load->view('pages/team-management',$view);
-        $this->load->view('templates/footer');
+			// render page
+	        $this->load->view('templates/header-participant');
+	        $this->load->view('pages/team-management',$view);
+	        $this->load->view('templates/footer');
+			}else{
+				redirect('/participant/login');
+			}
 	}
 
 	// display team information page only for a team member
 	public function team_info()
 	{
-		//get pk participant from session
-		$pk_participant   = $this->session->userdata['logged_in']['pk_participant'];
-		//get participant information based on pk participant
-		$participant_data = $this->participant_model->get_by_id($pk_participant);
-		$fk_team          = $participant_data->fk_team;
+		if($this->is_login() == true){
+			//get pk participant from session
+			$pk_participant   = $this->session->userdata['logged_in']['pk_participant'];
+			//get participant information based on pk participant
+			$participant_data = $this->participant_model->get_by_id($pk_participant);
+			$fk_team          = $participant_data->fk_team;
 
-		//get team data based on fk team
-		$team_data 		= $this->team_model->get_by_fk($fk_team);
-		$pk_team   		= $team_data->pk_team;
-		$status    		= $team_data->team_status;
-		$team_type 		= $team_data->team_type;
-		$fk_participant = $team_data->fk_participant;
+			//get team data based on fk team
+			$team_data 		= $this->team_model->get_by_fk($fk_team);
+			$pk_team   		= $team_data->pk_team;
+			$status    		= $team_data->team_status;
+			$team_type 		= $team_data->team_type;
+			$fk_participant = $team_data->fk_participant;
 
-		//get leader information
-		$leader_data 	= $this->participant_model->get_by_id($fk_participant);
-		$team_leader 	= $leader_data->participant_name;
+			//get leader information
+			$leader_data 	= $this->participant_model->get_by_id($fk_participant);
+			$team_leader 	= $leader_data->participant_name;
 
-		// get member data based on pk team
-		$member_data = $this->participant_model->get_by_team($pk_team);
-		$view['member_data'] = $member_data;
+			// get member data based on pk team
+			$member_data = $this->participant_model->get_by_team($pk_team);
+			$view['member_data'] = $member_data;
 
-		$view['team_leader'] = $team_leader;
-		$view['pk_team']     = $pk_team;
-		$view['team_status'] = 'Belum Diverifikasi';
-		$view['team_name']   = $team_data->team_name;
+			$view['team_leader'] = $team_leader;
+			$view['pk_team']     = $pk_team;
+			$view['team_status'] = 'Belum Diverifikasi';
+			$view['team_name']   = $team_data->team_name;
 
-		// checking team status
-		if($status != 0){
-			$view['team_status'] = 'Telah Diverifikasi';
-		}
+			// checking team status
+			if($status != 0){
+				$view['team_status'] = 'Telah Diverifikasi';
+			}
 
-		// convert team code to team competition type
-		if($team_type == 'sd'){
-			$view['team_type'] = 'Software Development';
-		}else if($team_type == 'bp'){
-			$view['team_type'] = 'Business Plan';
-		}else if($team_type == 'sm'){
-			$view['team_type'] = 'Short Movie';
+			// convert team code to team competition type
+			if($team_type == 'sd'){
+				$view['team_type'] = 'Software Development';
+			}else if($team_type == 'bp'){
+				$view['team_type'] = 'Business Plan';
+			}else if($team_type == 'sm'){
+				$view['team_type'] = 'Short Movie';
+			}else{
+				$view['team_type'] = 'Futsal';
+			}
+
+	        $this->load->view('templates/header-participant');
+	        $this->load->view('pages/team-info',$view);
+	        $this->load->view('templates/footer');
 		}else{
-			$view['team_type'] = 'Futsal';
+			redirect('/participant/login');
 		}
-
-        $this->load->view('templates/header-participant');
-        $this->load->view('pages/team-info',$view);
-        $this->load->view('templates/footer');
 	}
 
 	// Display payment page
 	public function payment()
 	{
-        $this->load->view('templates/header-participant');
-        $this->load->view('pages/payment');
-        $this->load->view('templates/footer');
+		if($this->is_login() == true){
+			//get pk participant from session
+			$pk_participant   = $this->session->userdata['logged_in']['pk_participant'];
+			//get participant information based on pk participant
+			$participant_data = $this->participant_model->get_by_id($pk_participant);
+			$fk_team          = $participant_data->fk_team;
+
+			//get team data based on fk team
+			$team_data 		= $this->team_model->get_by_fk($fk_team);
+			$team_type 		= $team_data->team_type;
+			$view['team_type'] = $team_type;
+
+			$this->load->view('templates/header-participant');
+	        $this->load->view('pages/payment',$view);
+	        $this->load->view('templates/footer');
+		}else{
+			redirect('/participant/login');
+		}
 	}
 
 	//Display FAQ page
 	public function faq()
 	{
-        $this->load->view('templates/header-participant');
-        $this->load->view('pages/faq');
-        $this->load->view('templates/footer');
+		if($this->is_login() == true){
+	        $this->load->view('templates/header-participant');
+	        $this->load->view('pages/faq');
+	        $this->load->view('templates/footer');
+		}else{
+			redirect('/participant/login');
+		}
 	}
 
 	//Dsiplay join team form page 
 	public function join_team_form()
 	{
-		//form validation
-		$this->form_validation->set_rules('fk_team', 'Join Code', 'required|numeric');
-    	
-    	if ($this->form_validation->run() == FALSE){
-        	$this->load->view('templates/header-participant');
-        	$this->load->view('pages/team-join');
-        	$this->load->view('templates/footer');
-        }else{
-        	$this->join_team();
-        }
+		if($this->is_login() == true){
+	       	//form validation
+			$this->form_validation->set_rules('fk_team', 'Join Code', 'required|numeric');
+	    	
+	    	if ($this->form_validation->run() == FALSE){
+	        	$this->load->view('templates/header-participant');
+	        	$this->load->view('pages/team-join');
+	        	$this->load->view('templates/footer');
+	        }else{
+	        	$this->join_team();
+	        }
+		}else{
+			redirect('/participant/login');
+		}
 	}
 
 	// Display submit document form page
-	public function proposal()
+	public function submit_form()
 	{
-		$this->load->view('templates/header-participant');
-        $this->load->view('pages/proposal');
-        $this->load->view('templates/footer');
+		if($this->is_login() == true){
+			//form validation
+			$this->form_validation->set_rules('team_doc', 'Document', 'callback_file_check_doc_team');
+
+			if ($this->form_validation->run() == FALSE){
+	        	$this->load->view('templates/header-participant');
+	        	$this->load->view('pages/proposal');
+	        	$this->load->view('templates/footer');
+	        }else{
+	        	$this->submit();
+	        }
+		}else{
+			redirect('/participant/login');
+		}
+	}
+
+		// Display submit document form page
+	public function submit_video_form()
+	{
+		if($this->is_login() == true){
+			//form validation
+			$this->form_validation->set_rules('team_doc', 'Video Link', 'required|valid_url');
+
+			if ($this->form_validation->run() == FALSE){
+	        	$this->load->view('templates/header-participant');
+	        	$this->load->view('pages/submit-video-form');
+	        	$this->load->view('templates/footer');
+	        }else{
+	        	$this->submit_video();
+	        }
+		}else{
+			redirect('/participant/login');
+		}
 	}
 
 
@@ -396,6 +461,7 @@ class Participant extends CI_Controller {
 
 		//redirect success page
 		$this->load->view('templates/header');
+
 		$this->load->view('pages/signup-success');
 		$this->load->view('templates/footer');
 
@@ -412,6 +478,28 @@ class Participant extends CI_Controller {
 		$participant_univ 		= $this->input->post('participant_university');
 		$participant_msisdn 	= $this->input->post('participant_msisdn');
 		$participant_idcard 	= $this->input->post('participant_id');
+
+		$data = array(
+			'participant_msisdn' 	=> $participant_msisdn,
+			'participant_idcard' 	=> $participant_idcard,
+		);
+
+		//duplicate check
+		$duplicate_check_rule = array('participant_msisdn','participant_idcard');
+		foreach ($duplicate_check_rule as $key => $value) {
+			# code...
+			$duplicate_check = $this->participant_model->duplicate_check($data,$duplicate_check_rule[$key]);
+			if($duplicate_check == true){
+				if ($duplicate_check_rule[$key] == 'participant_msisdn'){
+					$view['error_msg'] = "Duplicate entry on phone number";
+				}else{
+					$view['error_msg'] = "Duplicate entry on $duplicate_check_rule[$key]";
+				}
+					$this->load->view('templates/header-participant');
+					$this->load->view('pages/register-details',$view);
+					$this->load->view('templates/footer');
+			}
+		}
 
 		//upload config
 		$config['upload_path'] = './uploads/participants/';
@@ -449,27 +537,21 @@ class Participant extends CI_Controller {
 					$this->dashboard();
 				//error conditional if query failed
 				}else{
-					$data['error_msg'] = 'Insert Failed';
-					$this->load->view('templates/header-participant');
-					$this->load->view('pages/register-details',$data);
-					$this->load->view('templates/footer');		
+					$data['error_msg'] = 'Insert Failed';		
 				}
 			//Error conditional if upload failed
 			}else{
 				$error = $this->upload->display_errors();
 				$data['error_msg'] = $error;
-				$this->load->view('templates/header-participant');
-				$this->load->view('pages/register-details',$data);
-				$this->load->view('templates/footer');
 			}
 		//Error conditional if upload failed
 		}else{
 			$error = $this->upload->display_errors();
 			$data['error_msg'] = $error;
-			$this->load->view('templates/header-participant');
-			$this->load->view('pages/register-details',$data);
-			$this->load->view('templates/footer');
 		}
+		$this->load->view('templates/header-participant');
+		$this->load->view('pages/register-details',$data);
+		$this->load->view('templates/footer');
 	}
 
 
@@ -483,10 +565,6 @@ class Participant extends CI_Controller {
 		$team_data      = $this->team_model->get_by_id($pk_participant);
 		$fk_team 		= $team_data->pk_team;
 
-		//retrieve user input
-		$participant_name 	= $this->input->post('participant_name');
-		$participant_email 	= $this->input->post('participant_email');
-
         //get all post data from user input form
         $participant_name 		= $this->input->post('participant_name');
 		$participant_email 		= $this->input->post('participant_email');
@@ -495,43 +573,77 @@ class Participant extends CI_Controller {
 		$participant_msisdn 	= $this->input->post('participant_msisdn');
 		$participant_idcard 	= $this->input->post('participant_id');
 
-		//upload config
-		$participant_folder = $config['upload_path'] = './uploads/participant/'.$pk_participant;
-		$config['allowed_types'] 	= 'jpg|jpeg|png|pdf';
-		$config['max_size']      	= 2048 ;
+		//load data to array
+		$data = array(
+			'participant_email' 	=> $participant_email,
+			'participant_msisdn' 	=> $participant_msisdn,
+			'participant_idcard' 	=> $participant_idcard,
+		);
 
-		//load upload library and initialize config
-		$this->load->library('upload',$config);
-		$this->upload->initialize($config);
-
-		if($this->upload->do_multi_upload("participant_file")) {
-			//Code to run upon successful upload.
-
-			$data = array(
-				'fk_team'				=> $fk_team,
-				'participant_name' 		=> $participant_name ,
-				'participant_email' 	=> $participant_email,
-				'participant_univ' 		=> $participant_univ ,
-				'participant_msisdn' 	=> $participant_msisdn,
-				'participant_idcard' 	=> $participant_idcard,
-				'participant_folder' 	=> $participant_folder,
-				'participant_status'    => 1 
-			);
-
-			$status = $this->participant_model->add($data);
-
-				if($status != 0){
-					$this->team_management();
+		//duplicate checking
+		$duplicate_check_rule = array('participant_msisdn','participant_idcard','participant_email');
+		foreach ($duplicate_check_rule as $key => $value) {
+			# code...
+			$duplicate_check = $this->participant_model->duplicate_check($data,$duplicate_check_rule[$key]);
+			if($duplicate_check == true){
+				if ($duplicate_check_rule[$key] == 'participant_msisdn'){
+					$view['error_msg'] = "Duplicate entry on phone number";
 				}else{
-					$data['error_msg'] = $status;
-					$this->load->view('templates/header-participant');
-					$this->load->view('pages/team-management',$data);
-					$this->load->view('templates/footer');		
+					$view['error_msg'] = "Duplicate entry on $duplicate_check_rule[$key]";
 				}
-		}else{
-			$data['error_msg'] = $this->uploads->display_errors();
+					$this->load->view('templates/header-participant');
+					$this->load->view('pages/team-member',$view);
+					$this->load->view('templates/footer');
+			}
+		}
+
+		if($duplicate_check == false){
+			//upload config
+			$config['upload_path'] 		= './uploads/participants/';
+			$config['allowed_types'] 	= 'jpg|jpeg|png|pdf';
+			$config['max_size']      	= 2048 ;
+
+			//load upload library and initialize config
+			$this->load->library('upload',$config);
+			$this->upload->initialize($config);
+
+			if($this->upload->do_upload("participant_photo")) {
+				$upload_data = $this->upload->data();
+				$participant_photo = $upload_data['file_name'];
+
+				if($this->upload->do_upload("participant_doc")) {
+					$upload_data = $this->upload->data();
+					$participant_doc = $upload_data['file_name'];
+
+					$data = array(
+						'fk_team'				=> $fk_team,
+						'participant_name' 		=> $participant_name ,
+						'participant_email' 	=> $participant_email,
+						'participant_univ' 		=> $participant_univ ,
+						'participant_msisdn' 	=> $participant_msisdn,
+						'participant_idcard' 	=> $participant_idcard,
+						'participant_photo' 	=> $participant_photo,
+						'participant_doc' 	    => $participant_doc,
+						'participant_status'    => 1 
+					);
+
+					$status = $this->participant_model->add($data);
+
+					if($status != 0){
+						redirect('/participant/team_management','refresh');
+					}else{
+						$view['error_msg'] = $status;	
+					}
+
+				}else{
+					$view['error_msg'] = $this->upload->display_errors();	
+				}
+			}else{
+				$view['error_msg'] = $this->upload->display_errors();
+			}
+
 			$this->load->view('templates/header-participant');
-			$this->load->view('pages/team-member',$data);
+			$this->load->view('pages/team-member',$view);
 			$this->load->view('templates/footer');
 		}
 	}
@@ -574,12 +686,21 @@ class Participant extends CI_Controller {
 					redirect('/participant/dashboard');
 
 				}else{
-					$data['error_msg'] = "Login Gagal, Username atau kata sandi anda salah";					
-					$this->load->view('templates/header');
-		        	$this->load->view('pages/login',$data);
-		        	$this->load->view('templates/footer');
+					$view['error_msg'] = "Login Gagal, Username atau kata sandi anda salah";					
 				}
 			}
+			$this->load->view('templates/header');
+		    $this->load->view('pages/login',$view);
+		    $this->load->view('templates/footer');
+	}
+
+	public function is_login()
+	{
+		if(isset($this->session->userdata['logged_in'])){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	//JOIN TEAM METHOD
@@ -604,18 +725,95 @@ class Participant extends CI_Controller {
 			//redirect page
 			redirect('/participant/dashboard','refresh');
 		}else{
-			$data['error_msg'] = 'Team Telah Penuh, silahkan bergabung dengan tim lain';
+			$view['error_msg'] = 'Team Telah Penuh, silahkan bergabung dengan tim lain';
+		}
 			$this->load->view('templates/header-participant');
-	        $this->load->view('pages/team-join',$data);
+	        $this->load->view('pages/team-join',$view);
 	        $this->load->view('templates/footer');
+	}
+
+	//SUBMIT DOCUMENT METHOD
+	public function submit()
+	{
+		//upload config
+		$config['upload_path'] 		= './uploads/teams/';
+		$config['allowed_types'] 	= 'doc|docx|pdf';
+		$config['max_size']      	= 5120 ;
+
+		//load upload library and initialize config
+		$this->load->library('upload',$config);
+		$this->upload->initialize($config);
+
+		//get pk participant from session
+		$pk_participant = $this->session->userdata['logged_in']['pk_participant'];
+
+		//get team data using pk participant
+		$team_data      = $this->team_model->get_by_id($pk_participant);
+		$pk_team 		= $team_data->pk_team;
+
+		if($this->upload->do_upload("team_doc")) {
+
+			$upload_data = $this->upload->data();
+			$team_doc 	 = $upload_data['file_name'];
+
+			$data = array(
+				'pk_team'  => $pk_team,
+				'team_doc' => $team_doc
+			);
+
+			$query_status = $this->team_model->update_document($data);
+
+			if($query_status != 0){
+				redirect('participant/team_management','refresh');
+				//error conditional if query failed
+			}else{
+				$view['error_msg'] = 'Insert Failed';	
+			}
+
+		}else{
+			$error = $this->upload->display_errors();
+			$view['error_msg'] = $error;
+		}
+		$this->load->view('templates/header-participant');
+		$this->load->view('pages/proposal',$view);
+		$this->load->view('templates/footer');	
+		
+	}
+
+	//SUBMIT VIDEO METHOD
+	public function submit_video()
+	{
+		//get pk participant from session
+		$pk_participant = $this->session->userdata['logged_in']['pk_participant'];
+
+		//get team data using pk participant
+		$team_data      = $this->team_model->get_by_id($pk_participant);
+		$pk_team 		= $team_data->pk_team;
+
+		$team_doc = $this->input->post('team_doc');
+
+		$data = array(
+			'pk_team'  => $pk_team,
+			'team_doc' => $team_doc
+		);
+
+		$query_status = $this->team_model->update_document($data);
+
+		if($query_status != 0){
+			redirect('participant/team_management','refresh');
+			//error conditional if query failed
+		}else{
+			$view['error_msg'] = 'Insert Failed';	
 		}
 
+		$this->load->view('templates/header-participant');
+		$this->load->view('pages/proposal',$view);
+		$this->load->view('templates/footer');	
 		
 	}
 
 	//FILE CHECKING photo
 	public function file_check_photo($str){
-		echo $str;
         $allowed_mime_type_arr = array('application/pdf','image/gif','image/jpeg','image/pjpeg','image/png','image/x-png');
         $mime = get_mime_by_extension($_FILES['participant_photo']['name']);
         if(isset($_FILES['participant_photo']['name']) && $_FILES['participant_photo']['name']!=""){
@@ -633,7 +831,6 @@ class Participant extends CI_Controller {
 
     	//FILE CHECKING document
 	public function file_check_doc($str){
-		echo $str;
         $allowed_mime_type_arr = array('application/pdf','image/gif','image/jpeg','image/pjpeg','image/png','image/x-png');
         $mime = get_mime_by_extension($_FILES['participant_doc']['name']);
         if(isset($_FILES['participant_doc']['name']) && $_FILES['participant_doc']['name']!=""){
@@ -645,6 +842,23 @@ class Participant extends CI_Controller {
             }
         }else{
             $this->form_validation->set_message('file_check_doc', 'Harap upload berkas dokumen yang diperlukan.');
+            return false;
+        }
+    }
+
+        	//FILE CHECKING document
+	public function file_check_doc_team($str){
+        $allowed_mime_type_arr = array('application/pdf','image/gif','image/jpeg','image/pjpeg','image/png','image/x-png');
+        $mime = get_mime_by_extension($_FILES['team_doc']['name']);
+        if(isset($_FILES['team_doc']['name']) && $_FILES['team_doc']['name']!=""){
+            if(in_array($mime, $allowed_mime_type_arr)){
+                return true;
+            }else{
+                $this->form_validation->set_message('file_check_doc_team', 'Harap hanya masukan file dengan jenis pdf/gif/jpg/png.');
+                return false;
+            }
+        }else{
+            $this->form_validation->set_message('file_check_doc_team', 'Harap upload berkas dokumen yang diperlukan.');
             return false;
         }
     }

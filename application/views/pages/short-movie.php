@@ -6,7 +6,7 @@
 												<h2 class="competition-heading">SHORT MOVIE COMPETITION</h2>
 													<p class="competition-desc">Film  Pendek / Short Movie  adalah  sebuah  karya  audio-visual  yang berdurasi  pendek  dan  bercerita  dengan singkat.  Satu situasi yang terjadi dalam kehidupan tokoh atau subyek tertentu yang mencerminkan tema. Yang menjadi fokus utama adalah short movie yang berisi saran, imbauan, seruan, dan solusi  sesuai dengan tema lomba. Serta isi short movie yang harus menarik, komunikaf, dan inspiraf. Lomba ini terdiri atas dua tahap, yaitu tahap pendaaran dan pengumpulan short movie, dan yang kedua adalah tahap penjurian
 													</p>
-												<a href="<?=base_url('/pages/download/hifest_rulebook.pdf');?>"><h3>Download Rulebook</h3></a>
+												<a href="<?=base_url('/pages/download/rulebook_short_movie_hifestuinjkt2017.pdf');?>"><h3>Download Rulebook</h3></a>
 											</div>
 										</header>
 
@@ -55,11 +55,23 @@
 													<tbody>
 														<tr>
 															<td>Pendaftaran</td>
-															<td>1 Agustus - 1 Oktober 2017.</td>
+															<td>13 September - 5 Oktober 2017</td>
 														</tr>
 														<tr>
-															<td>Pelaksanaan</td>
-															<td>6 November 2017.</td>
+															<td>Technical Meeting </td>
+															<td>6 Oktober 2017</td>
+														</tr>
+														<tr>
+															<td>Pengumpulan</td>
+															<td>7 Oktober – 4 November 2017</td>
+														</tr>
+														<tr>
+															<td>Penjurian</td>
+															<td>11 November 2017</td>
+														</tr>
+														<tr>
+															<td>Final dan Pengumuman </td>
+															<td>18 November 2017</td>
 														</tr>
 													</tbody>
 													<tfoot>

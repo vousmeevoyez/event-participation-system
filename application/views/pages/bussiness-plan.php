@@ -4,9 +4,14 @@
 										<header>
 											<div class="inner">
 												<h2 class="competition-heading">Bussiness Plan COMPETITION</h2>
-													<p class="competition-desc">Bussiness plan adalah kompetisi antar mahasiswa dalam mengkonsep perencanaan bisnis dan menjalankanya dalam bidang teknologi dengan tema technopreneur. Technopreneur yaitu seseorang yang memiliki bisnis/rencana bisnis berbasis teknologi. Dengan semua ini diharap mampu menggali potensi mahasiswa dalam berwirausaha di bidang Technopreneur, Menumbuhkan movasi berwirausaha, untuk memacu kreavitas dan inovasi dalam bidang technopreneur, dan Berbagi pengetahuan kepada masyarakat umum yang ingin memulai bisnis dengan memanfaatkan teknologi
+													<p class="competition-desc">Business Plan Competition (BPC) merupakan salah satu rangkaian acara HIFEST 2017 dimana peserta dituntut untuk mengembangkan ide bisnis yang feasible dan inovatif untuk kemudian dipresentasikan dihadapan dewan juri setelah mengikuti serangkaian seleksi. </p>
+													<p class="competition-desc">
+													Peserta Business Plan Competition (BPC) yaitu adalah mahasiswa se-Jabodetabek yang terdiri atas 1-3 orang per tim. BPC HIFEST 2017 kali ini mengusung sub-tema: <i>“Implementing Technology Through Creative Business” </i>. Tema ini bertujuan untuk memacu peserta dalam berpikir kreatif dan mengembangkan wawasan dalam merealisasikan ide bisnisnya secara nyata dengan penggunaan teknologi sebagai salah satu aspek penunjang bisnisnya. Tidak dapat dipungkiri bahwa perkembangan teknologi telah membuat arus perkembangan bisnis berubah dengan munculnya social media advertising, ecommerce, dan bisnis-bisnis berbasis teknologi. </p>
+													<p class="competition-desc">
+													Maka dari itu, dengan sub-tema ini peserta diharapkan dapat memanfaatkan perkembangan teknologi untuk menunjang bisnisnya baik dengan merealisasikan ide bisnis yang berbasis teknologi ataupun menjadikan teknologi sebagai alat penunjang bisnisnya (alat penunjang pemasaran, operasional, maupun manajemen keuangan).
+
 													</p>
-												<a href="<?=base_url('/pages/download/hifest_rulebook.pdf');?>"><h3>Download Rulebook</h3></a>
+												<a href="<?=base_url('/pages/download/rulebook_business_plan_hifestuinjkt2017.pdf');?>"><h3>Download Rulebook</h3></a>
 											</div>
 										</header>
 
@@ -55,11 +60,23 @@
 													<tbody>
 														<tr>
 															<td>Pendaftaran</td>
-															<td>1 Agustus - 1 Oktober 2017.</td>
+															<td>13 September – 10 Oktober 2017</td>
 														</tr>
 														<tr>
-															<td>Pelaksanaan</td>
-															<td>6 November 2017.</td>
+															<td>Technical Meeting </td>
+															<td>16 Oktober 2017 </td>
+														</tr>
+														<tr>
+															<td>Pengumpulan</td>
+															<td>16 Oktober – 9 November 2017 </td>
+														</tr>
+														<tr>
+															<td>Presentasi</td>
+															<td> 10 November 2017</td>
+														</tr>
+														<tr>
+															<td>Final dan Pengumuman </td>
+															<td> 18 November 2017</td>
 														</tr>
 													</tbody>
 													<tfoot>

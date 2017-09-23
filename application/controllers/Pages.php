@@ -20,7 +20,7 @@ class Pages extends CI_Controller {
 	public function download($filename = NULL) {
 
 	    $this->load->helper('download');
-	    $data = file_get_contents(base_url('/uploads/'.$filename));
+	    $data = file_get_contents(base_url('/uploads/rulebook/'.$filename));
 	    force_download($filename, $data);
 	}
 	

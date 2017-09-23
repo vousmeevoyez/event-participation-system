@@ -62,6 +62,19 @@ class Participant_model extends CI_Model
 		}
 		
 	}
+
+	public function duplicate_check($data,$column_check)
+	{
+		$this->db->select('*');
+		$this->db->from($this->table);
+		$this->db->where("$column_check",$data["$column_check"]);
+		$query = $this->db->get();
+		if ($query->num_rows() == 0){
+			return false;
+		}else{
+			return true;
+		}
+	}
  
 	public function update($data)
 	{

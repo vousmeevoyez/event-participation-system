@@ -3,11 +3,34 @@
 					<section id="wrapper">
 										<header>
 											<div class="inner">
-												<h2 class="competition-heading">PAYMENT</h2>
-													<p class="competition-desc">Silahkan menyelesaikan biaya pendaftaran untuk dapat berpartisipasi di HIFEST 2017 dengan transfer dan kirimkan bukti konfirmasi ke : <b>kelvindsmn@gmail.com</b></p>
-													<h3 style="text-align: center;">KELVIN</h3>
-													<h3 style="text-align: center;">BCA</h3>
-													<h3 style="text-align: center;">XXX - XXX - XXX</h3>
+												<h2 class="competition-heading">Pembayaran</h2>
+													<?php if ($team_type == 'bp'){?>
+													<p class="competition-desc">Silahkan menyelesaikan biaya pendaftaran untuk dapat berpartisipasi di HIFEST 2017 dengan melakukan pembayaran sebesar <b>Rp 100.000</b> ke : </p>
+													<h3 style="text-align: center;">Dewinta Fenny</h3>
+													<h3 style="text-align: center; font-family: Lato;">1310011597871</h3>
+													<h3 style="text-align: center;">Mandiri	</h3>
+													<p class="competition-desc">Dan melakukan konfirmasi pembayaran via WhatsApp ke salah contact person dibawah ini : </p>
+														<h3 style="text-align: center; font-family: Lato;">Alifia <br>082243639954</h3>
+														<h3 style="text-align: center; font-family: Lato;">Fenny <br> 08977020031</h3>
+														<h3 style="text-align: center; font-family: Lato;">Umam <br> 083871393216</h3>
+													<?php }else if ($team_type == 'sd'){ ?>
+													<p class="competition-desc">Silahkan menyelesaikan biaya pendaftaran untuk dapat berpartisipasi di HIFEST 2017 dengan melakukan pembayaran sebesar <b>Rp 100.000</b> ke : </p>
+													<h3 style="text-align: center;">Ahmad Rifki Firmansyah</h3>
+													<h3 style="text-align: center; font-family: Lato;">1550006060449</h3>
+													<h3 style="text-align: center;">Mandiri	</h3>
+													<p class="competition-desc">Dan melakukan konfirmasi pembayaran via WhatsApp ke salah contact person dibawah ini : </p>
+														<h3 style="text-align: center; font-family: Lato;">Yusran Syuja <br>0822-1036-9083</h3>
+														<h3 style="text-align: center; font-family: Lato;">Faisal Rifq <br> 0858-1491-7958</h3>
+														<h3 style="text-align: center; font-family: Lato;">Ahmad Rifki F<br> 0895-3317-63846</h3>
+													<?php }else{ ?>
+													<p class="competition-desc">Silahkan menyelesaikan biaya pendaftaran untuk dapat berpartisipasi di HIFEST 2017 dengan melakukan pembayaran sebesar <b>Rp 150.000</b> ke : </p>
+													<h3 style="text-align: center;">Nadia Azza</h3>
+													<h3 style="text-align: center; font-family: Lato;">1310011597871</h3>
+													<h3 style="text-align: center;">BRI	</h3>
+													<p class="competition-desc">Dan melakukan konfirmasi pembayaran via WhatsApp ke salah contact person dibawah ini : </p>
+														<h3 style="text-align: center; font-family: Lato;">Azza <br>085694444843 </h3>
+														<h3 style="text-align: center; font-family: Lato;">Wafiy <br> 083804048117 </h3>
+													<?php }?>
 											</div>
 										</header>
 
