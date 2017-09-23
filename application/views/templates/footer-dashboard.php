@@ -17,7 +17,7 @@
     <script src="<?=base_url('assets/admin/js/jquery-1.10.2.js');?>" type="text/javascript"></script>
         <script src="<?=base_url('assets/sweetalert/dist/sweetalert.min.js');?>" type="text/javascript"></script>
     <script src="<?=base_url('assets/admin/js/bootstrap.min.js');?>" type="text/javascript"></script>
-    <script src="<?=base_url('assets/admin/js/custom.js');?>" type="text/javascript"></script>
+    <script src="<?=base_url('assets/admin/js/paritcipant_ajax.js');?>" type="text/javascript"></script>
     <script src="<?=base_url('assets/datatables/jquery.dataTables.min.js');?>" type="text/javascript"></script>
 <script>
     $(document).ready(function() {

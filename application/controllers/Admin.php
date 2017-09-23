@@ -14,7 +14,7 @@ class Admin extends CI_Controller {
 
 	public function index()
 	{
-		if(isset($this->session->userdata['logged_in'])){
+		if($this->is_login() == true){
 			$data['participants']=$this->participant_model->get_all_participants();
 			$this->load->view('templates/header-dashboard');
 			$this->load->view('admin/participant',$data);
@@ -22,8 +22,39 @@ class Admin extends CI_Controller {
 		}else{
 			redirect('admin/login');
 		}
+	}
 
-		
+	public function login()
+	{
+		//form validation
+		$this->form_validation->set_rules('username', 'Username', 'required|alpha');
+    	$this->form_validation->set_rules('password', 'Password', 'required');
+    	
+    	if ($this->form_validation->run() == FALSE){
+        	$this->load->view('admin/login');
+        }else{
+        	$this->check();
+        }
+	}
+
+	public function is_login(){
+		if(isset($this->session->userdata['logged_in'])){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function dashboard()
+	{
+		if($this->is_login() == true){
+			$data['teams']=$this->team_model->get_all_team();
+			$this->load->view('templates/header-dashboard');
+			$this->load->view('admin/team',$data);
+			$this->load->view('templates/footer-dashboard');
+		}else{
+			redirect('admin/login');
+		}
 	}
 
 	public function manage_team()
@@ -47,11 +78,6 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	public function login()
-	{
-		$this->load->view('admin/login_form');
-	}
-
 	public function logout()
 	{
 		$session_data = array(
@@ -61,7 +87,7 @@ class Admin extends CI_Controller {
 		redirect('/admin/login');
 	}
 
-	public function auth_add()
+	public function add()
 	{
 		$username = $this->input->post('username');
 		$password = $this->input->post('password');
@@ -72,7 +98,8 @@ class Admin extends CI_Controller {
 				'status' => '1',
 		);
 
-		$insert = $this->auth_model->auth_add($data);
+		$insert = $this->admin_model->auth_add($data);
+
 		if($insert == true){
 			$data = json_encode(array(
 						'status' => 0,
@@ -94,13 +121,13 @@ class Admin extends CI_Controller {
 		
 	}
 
-	public function auth_check()
+	public function check()
 	{
 		$username = $this->input->post('username');
 		$password = $this->input->post('password');
 
-		if(isset($this->session->userdata['logged_in'])){
-			redirect('/admin', 'refresh');
+		if($this->is_login() == true){
+			redirect('/admin/dashboard', 'refresh');
 		}else{
 				$data = array(
 					'username' =>$username,
@@ -111,26 +138,33 @@ class Admin extends CI_Controller {
 				$result = $this->admin_model->auth_check($data);
 				
 				if($result == true){
-					$response = json_encode(array(
-							'status' => 0,
-							'message' => 'AUTH_SUCCESS',
-							'data' => ''
-					));
 					$session_data = array(
 						'username' => 'ADMIN',
 					);
 					$this->session->set_userdata('logged_in', $session_data);
+					redirect('/admin/dashboard', 'refresh');
 				}else{
-						$response = json_encode(array(
-								'status' => 0,
-								'message' => 'AUTH_FAILED',
-								'data' => 'RECORD_NOT_FOUND'
-						));
+					$view['error_msg'] = 'Incorrect Login';
 				}
-			}
-			return 	$this->output
+				$this->load->view('admin/login',$view);
+		}
+	}
+
+	public function get_participant($id){
+		$participant_data = $this->participant_model->get_by_id($id);
+		$fk_team = $participant_data->fk_team;
+
+		$team_data = $this->team_model->get_by_fk($fk_team);
+
+		$data = json_encode(array(
+						'status' => 0,
+						'message' => 'GET_PARTICIPANT_SUCCESS',
+						'data_participant' => $participant_data,
+						'data_team'	=> $team_data
+		));
+		return 	$this->output
 						->set_content_type('application/json')
 						->set_status_header(200)
-						->set_output($response);
+						->set_output($data);
 	}
 }

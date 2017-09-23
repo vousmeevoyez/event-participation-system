@@ -1,9 +1,3 @@
-		<?php
-		if (isset($this->session->userdata['logged_in'])) {
-			header("location: http://localhost/ci-hifest/participant/check");
-		}
-		?>
-
 		<?php 
             echo form_open('participant/login'); 
         ?>

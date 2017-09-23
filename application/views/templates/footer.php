@@ -26,7 +26,8 @@
 											</div>
 										</div>
 							<ul class="copyright">
-								<li>&copy; HIMTI IT DEV 2017. All rights reserved.</li>
+								<li>INFORMATICS UIN JKT 2017. &copy; All rights reserved.</li>
+								<li>DEV BY <a href="https://github.com/vousmeevoyez">VOUSMEEVOYEZ</a></li>
 							</ul>
 						</div>
 					</section>

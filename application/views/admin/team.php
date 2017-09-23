@@ -16,33 +16,38 @@
                                 <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Team Name</th>
-                                            <th>Team University</th>
-                                            <th>Leader Name</th>
-                                            <th>Leader ID</th>
-                                            <th>Leader Email</th>
-                                            <th>Leader Phone Num</th>
-                                            <th>Team Member 1</th>
-                                            <th>Team Member 2</th>
-                                            <th>Team Type</th>
+                                            <th>Nama Tim</th>
+                                            <th>Kompetisi</th>
+                                            <th>File</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        <?php foreach ($teams as $team_item):?>
+                                        <?php foreach ($teams as $team_item):
+
+                                        $team_type = $team_item->team_type;
+                                        $status = $team_item->team_status;
+                                          if( $team_type == 'sd'){
+                                              $team_type = 'Software Development';
+                                            }else if($team_type == 'bp'){
+                                              $team_type = 'Business Plan';
+                                            }else{
+                                              $team_type = 'Short Movie';
+                                            }
+
+                                          if($status == 1){
+                                            $status = 'PAID';
+                                          }else{
+                                            $status = 'WAITING_PAYMENT';
+                                          }
+                                            ?>
                                         <tr>
                                             <td><?php echo $team_item->team_name;?></td>
-                                            <td><?php echo $team_item->team_university;?></td>
-                                            <td><?php echo $team_item->team_leader;?></td>
-                                            <td><?php echo $team_item->team_leader_id;?></td>
-                                            <td><?php echo $team_item->team_leader_email;?></td>
-                                            <td><?php echo $team_item->team_leader_msisdn;?></td>
-                                            <td><?php echo $team_item->team_member1;?></td>
-                                            <td><?php echo $team_item->team_member2;?></td>
-                                            <td><?php echo $team_item->team_type;?></td>
-                                            <td><?php echo $team_item->team_status;?></td>
+                                            <td><?php echo $team_type;?></td>
+                                            <td><?php echo $team_item->team_doc;?></td>
+                                            <td><?php echo $status;?></td>
                                             <td>
                                                 <a href="#" onclick="modal_get_data_team(<?php echo $team_item->pk_team;?>)">EDIT</a>
                                                  <a href="#" onclick="delete_data_team(<?php echo $team_item->pk_team;?>)">DELETE</a>

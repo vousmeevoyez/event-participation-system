@@ -17,27 +17,28 @@
                                 <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>NAME</th>
-                                            <th>UNIVERSITY</th>
-                                            <th>EMAIL</th>
-                                            <th>PHONE NUM</th>
-                                            <th>TYPE</th>
+                                            <th>Nama</th>
+                                            <th>Email</th>
+                                            <th>Universitas</th>
                                             <th>STATUS</th>
                                             <th>ACTION</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        <?php foreach ($participants as $participant):?>
+                                        <?php foreach ($participants as $participant):
+                                        $status = $participant->participant_status;
+                                          if($status == 1){
+                                            $status = 'VERIF';
+                                          }else{
+                                            $status = 'NOT_VERIF';
+                                          }
+                                        ?>
                                         <tr>
-                                            <td><?php echo $participant->participant_id;?></td>
                                             <td><?php echo $participant->participant_name;?></td>
-                                            <td><?php echo $participant->participant_university;?></td>
                                             <td><?php echo $participant->participant_email;?></td>
-                                            <td><?php echo $participant->participant_msisdn;?></td>
-                                            <td><?php echo $participant->participant_type;?></td>
-                                            <td><?php echo $participant->participant_status;?></td>
+                                            <td><?php echo $participant->participant_univ;?></td>
+                                            <td><?php echo $status;?></td>
                                             <td>
                                                 <a href="#" onclick="modal_get_data_participant(<?php echo $participant->pk_participant;?>)">EDIT</a>
                                                  <a href="#" onclick="delete_data_participant(<?php echo $participant->pk_participant;?>)">DELETE</a>
@@ -77,30 +78,23 @@
             </div>
 
             <div class="form-group">
-              <label class="control-label col-md-3">Participant ID</label>
-                  <div class="col-md-9">
-                    <input name="participant_id" placeholder="Participant ID" class="form-control" type="text">
-                  </div>
-            </div>
-
-            <div class="form-group">
               <label class="control-label col-md-3">Participant Name</label>
                   <div class="col-md-9">
                     <input name="participant_name" placeholder="Participant Name" class="form-control" type="text">
                   </div>
             </div>
 
-            <div class="form-group">
-              <label class="control-label col-md-3">Participant University</label>
+          <div class="form-group">
+              <label class="control-label col-md-3">Participant Email</label>
                   <div class="col-md-9">
-                    <input name="participant_university" placeholder="Participant University" class="form-control" type="text">
+                    <input name="participant_email" placeholder="Participant Email" class="form-control" type="text">
                   </div>
             </div>
 
             <div class="form-group">
-              <label class="control-label col-md-3">Participant Email</label>
+              <label class="control-label col-md-3">Participant University</label>
                   <div class="col-md-9">
-                    <input name="participant_email" placeholder="Participant Email" class="form-control" type="text">
+                    <input name="participant_univ" placeholder="Participant University" class="form-control" type="text">
                   </div>
             </div>
 
@@ -112,19 +106,11 @@
             </div>
 
             <div class="form-group">
-              <label class="control-label col-md-3">Competition Type</label>
+              <label class="control-label col-md-3">Participant ID</label>
                   <div class="col-md-9">
-                    <input name="participant_type" placeholder="Competition Type" class="form-control" type="text">
+                    <input name="participant_idcard" placeholder="Participant ID" class="form-control" type="text">
                   </div>
             </div>
-
-            <div class="form-group">
-              <label class="control-label col-md-3">Password</label>
-                  <div class="col-md-9">
-                    <input name="participant_password" placeholder="*******" class="form-control" type="password">
-                  </div>
-            </div>
-
 
             <div class="form-group">
               <label class="control-label col-md-3">Status</label>
